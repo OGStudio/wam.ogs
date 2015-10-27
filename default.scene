@@ -5,9 +5,6 @@ node
             parent = ROOT
             position = 0.000000 15.000000 15.000000
             light = default
-        floor
+        base
             parent = ROOT
             model = models/floor.osgt
-        n-2430683556
-            parent = ROOT
-            model = models/base.osgt
