@@ -1,0 +1,13 @@
+sample
+    delete
+        key = INPUT_KEY_D
+    parent
+        key = INPUT_KEY_P
+    quit
+        key = INPUT_KEY_ESCAPE
+    rename
+        key = INPUT_KEY_R
+    save
+        key = INPUT_KEY_S
+    select
+        key = INPUT_MOUSE_BUTTON_LEFT
