@@ -1,5 +1,20 @@
 <compositor>
-    <texture name="boxNormal" template="textureTemplate">
-        <file>pipeline/textures/box_n.png</file>
+    <texture name="base_n" template="textureTemplate">
+        <file>pipeline/textures/base_n.png</file>
+    </texture>
+    <texture name="leverage_tex" template="textureTemplate">
+        <file>pipeline/textures/leverage_tex.png</file>
+    </texture>
+    <texture name="leverage_n" template="textureTemplate">
+        <file>pipeline/textures/leverage_n.png</file>
+    </texture>
+    <texture name="target_n" template="textureTemplate">
+        <file>pipeline/textures/target_n.png</file>
+    </texture>
+    <texture name="target_tex" template="textureTemplate">
+        <file>pipeline/textures/target_tex.png</file>
+    </texture>
+    <texture name="wam_tex" template="textureTemplate">
+        <file>pipeline/textures/wam_tex.png</file>
     </texture>
 </compositor>

@@ -3,8 +3,64 @@ node
     default
         light
             parent = ROOT
-            position = 0.000000 15.000000 15.000000
+            position = 0.000000 -15.000000 15.000000
             light = default
+        target1
+            parent = ROOT
+            position = -0.750000 -0.750000 -0.500000
+            material = target
+            model = models/target.osgt
         base
             parent = ROOT
-            model = models/floor.osgt
+            material = base
+            model = models/base.osgt
+        leverage3
+            parent = ROOT
+            position = 0.000000 0.250000 0.350000
+            rotation = 270.000000 0.000000 0.000000
+            material = leverage
+            model = models/leverage.osgt
+        leverage4
+            parent = ROOT
+            position = 0.370000 0.630000 0.350000
+            rotation = 270.000000 0.000000 0.000000
+            material = leverage
+            model = models/leverage.osgt
+        leverage2
+            parent = ROOT
+            position = -0.370000 0.630000 0.350000
+            rotation = 270.000000 0.000000 0.000000
+            material = leverage
+            model = models/leverage.osgt
+        leverage1
+            parent = ROOT
+            position = -0.750000 0.250000 0.350000
+            rotation = 270.000000 0.000000 0.000000
+            material = leverage
+            model = models/leverage.osgt
+        leverage5
+            parent = ROOT
+            position = 0.750000 0.250000 0.350000
+            rotation = 270.000000 0.000000 0.000000
+            material = leverage
+            model = models/leverage.osgt
+        target2
+            parent = ROOT
+            position = -0.370000 -0.370000 -0.500000
+            material = target
+            model = models/target.osgt
+        target4
+            parent = ROOT
+            position = 0.380000 -0.370000 -0.500000
+            material = target
+            model = models/target.osgt
+        target3
+            parent = ROOT
+            position = 0.000000 -0.750000 -0.500000
+            material = target
+            model = models/target.osgt
+        target5
+            parent = ROOT
+            position = 0.750000 -0.750000 -0.500000
+            material = target
+            model = models/target.osgt
