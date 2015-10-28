@@ -14,6 +14,7 @@ node
             parent = ROOT
             material = base
             model = models/base.osgt
+            script = scripts/Main.py
         leverage3
             parent = ROOT
             position = 0.000000 0.250000 0.350000
