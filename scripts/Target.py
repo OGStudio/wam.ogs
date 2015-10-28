@@ -60,12 +60,13 @@ class TargetImpl(object):
         node = sceneName + "." + nodeName
         if (node not in self.selectable):
             return
-        print "onSelection", nodeName
-        s = self.selectable[node]
-#        st = pymjin2.State()
-#        st.set("{0}.node".format(bs.press), node)
-#        st.set("{0}.active".format(bs.press), "1")
-#        self.action.setState(st)
+        self.report(node, "selected", "1")
+        self.report(node, "selected", "0")
+    def report(self, node, property, value):
+        st = pymjin2.State()
+        key = "target.{0}.{1}".format(node, property)
+        st.set(key, value)
+        self.senv.reportStateChange(st)
     def setSelectable(self, key, values):
         v = key.split(".")
         sceneName = v[1]
