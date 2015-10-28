@@ -36,12 +36,17 @@ class Main:
         self.senv         = scriptEnvironment
         self.dependencies = dependencies
         # Create.
-        #moduleB = self.dependencies[MAIN_DEPENDENCY_BUTTON]
-        #self.button = moduleB.Button(scene, action, scriptEnvironment)
+        mTarget = self.dependencies[MAIN_DEPENDENCY_TARGET]
+        self.target = mTarget.Target(scene, action, scriptEnvironment)
         self.impl = MainImpl(self.scene, self.senv)
         #self.listenerSEnv = MainListenerScriptEnvironment(self.impl)
         # Prepare.
-        # Enable exchange points and set their subject.
+        # Enable targets.
+        st = pymjin2.State()
+        for t in MAIN_TARGETS:
+            key = "target.{0}.{1}.selectable".format(sceneName, t)
+            st.set(key, "1")
+        self.senv.setState(st)
         print "{0} Main.__init__({1}, {2})".format(id(self), sceneName, nodeName)
     def __del__(self):
         # Tear down.
@@ -53,6 +58,7 @@ class Main:
         self.dependencies = None
         # Destroy
         del self.impl
+        del self.target
         print "{0} Main.__del__".format(id(self))
 
 def SCRIPT_CREATE(sceneName,
@@ -69,7 +75,7 @@ def SCRIPT_CREATE(sceneName,
                 dependencies)
 
 def SCRIPT_DEPENDENCIES():
-    return []#MAIN_DEPENDENCY_TARGET]
+    return [MAIN_DEPENDENCY_TARGET]
 
 def SCRIPT_DESTROY(instance):
     del instance
