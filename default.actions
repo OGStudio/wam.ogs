@@ -1,51 +1,13 @@
 moveBy
     default
-        liftCranePiston
+        liftTarget
             point = 0 0 0 0
-            point = 3000 0 0 2.7
-        lowerCranePiston
+            point = 3000 0 0 0.3
+        lowerTarget
             point = 0 0 0 0
-            point = 1000 0 0 -2.7
-        moveCraneUp
-            point = 0 0 0 0
-            point = 1000 0 -8 0
-        moveCraneDown
-            point = 0 0 0 0
-            point = 8000 0 8 0
-        moveButtonDown
-            point = 0 0 0 0
-            point = 150 0 0 -0.1
-        moveButtonUp
-            point = 0 0 0 0
-            point = 150 0 0 0.1
-        pressArrow
-            point = 0 0 0 0
-            point = 150 0 0 -0.1
-            point = 150 0 0 0
-        moveBeltLeft
-            point = 0 0 0 0
-            point = 3000 3 0 0
-        moveBeltRight
-            point = 0 0 0 0
-            point = 3000 -3 0 0
-        moveLeft
-            point = 0 0 0 0
-            point = 3000 1 0 0
-            point = 1000 -1 0 0
-            point = 1000 1 0 0
-            point = 2000 -1 0 0
-            point = 500 0 0 0
-            node = default.center
-        moveForward
-            point = 0 0 0 0
-            point = 3000 0 1 0
-            point = 1000 0 -1 0
-            point = 1000 0 1 0
-            point = 2000 0 -1 0
-            point = 500 0 0 0
-            node = default.left
+            point = 3000 0 0 -0.3
 sequence
     default
-        pressButton
-            action = moveButtonDown
-            action = moveButtonUp
+        popTarget
+            action = liftTarget
+            action = lowerTarget

@@ -1,5 +1,6 @@
 
 import pymjin2
+import random
 
 MAIN_DEPENDENCY_LEVERAGE = "scripts/Leverage.py"
 MAIN_DEPENDENCY_TARGET   = "scripts/Target.py"
@@ -24,10 +25,30 @@ class MainImpl(object):
         # Derefer.
         self.scene = None
         self.senv  = None
+    def onTargetMotion(self, key, values):
+        print "Main.onTargetMotion", key, values
+        v = key.split(".")
+        sceneName = v[1]
+        property = v[3]
+        state = values[0]
+        # Ignore activation.
+        if (state != "0"):
+            return
+        # Motion finished. Pop another target.
+        if (property == "moving"):
+            self.popRandomTarget(sceneName)
     def onTargetSelection(self, key, values):
         print "Main.onTargetSelection", key, values
         #st = pymjin2.State()
         #key = "leverage.
+    def popRandomTarget(self, sceneName):
+        random.seed(None)
+        id = random.randint(0, len(MAIN_TARGETS) - 1)
+        print "popping target", id
+        key = "target.{0}.{1}.moving".format(sceneName, MAIN_TARGETS[id])
+        st = pymjin2.State()
+        st.set(key, "1")
+        self.senv.setState(st)
 
 class Main:
     def __init__(self,
@@ -63,6 +84,11 @@ class Main:
         # Listen to target selection.
         key = "target.{0}..selected".format(sceneName)
         self.subs.subscribe(scriptEnvironment, key, self.impl, "onTargetSelection")
+        # Listen to target motion.
+        key = "target.{0}..moving".format(sceneName)
+        self.subs.subscribe(scriptEnvironment, key, self.impl, "onTargetMotion")
+
+        self.impl.popRandomTarget(sceneName)
         print "{0} Main.__init__({1}, {2})".format(id(self), sceneName, nodeName)
     def __del__(self):
         # Tear down.

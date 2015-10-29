@@ -1,24 +1,23 @@
 
 import pymjin2
 
-#Target_ACTION_GROUP      = "default"
-#Target_ACTION_DOWN_TYPE  = "moveBy"
-#Target_ACTION_DOWN_NAME  = "moveButtonDown"
-#Target_ACTION_PRESS_TYPE = "sequence"
-#Target_ACTION_PRESS_NAME = "pressButton"
+TARGET_ACTION_GROUP    = "default"
+TARGET_ACTION_TYPE_UP  = "moveBy"
+TARGET_ACTION_TYPE_POP = "sequence"
+TARGET_ACTION_NAME_UP  = "liftTarget"
+TARGET_ACTION_NAME_POP = "popTarget"
 
 class TargetState(object):
     def __init__(self):
-        self.up   = None
-        self.down = None
-#        self.press = None
-#    def setActionGroup(self, groupName):
-#        self.down = "{0}.{1}.{2}".format(Target_ACTION_DOWN_TYPE,
-#                                         groupName,
-#                                         Target_ACTION_DOWN_NAME)
-#        self.press = "{0}.{1}.{2}".format(Target_ACTION_PRESS_TYPE,
-#                                          groupName,
-#                                          Target_ACTION_PRESS_NAME)
+        self.up  = None
+        self.pop = None
+    def setActionGroup(self, groupName):
+        self.up = "{0}.{1}.{2}".format(TARGET_ACTION_TYPE_UP,
+                                       groupName,
+                                       TARGET_ACTION_NAME_UP)
+        self.pop = "{0}.{1}.{2}".format(TARGET_ACTION_TYPE_POP,
+                                        groupName,
+                                        TARGET_ACTION_NAME_POP)
 
 class TargetImpl(object):
     def __init__(self, scene, action, senv):
@@ -34,22 +33,18 @@ class TargetImpl(object):
         self.scene  = None
         self.action = None
         self.senv   = None
-#    def onActionState(self, key, values):
-#        state = (values[0] == "1")
-#        # Ignore activation.
-#        if (state):
-#            return
-#        # Ignore other actions.
-#        actionName = key.replace(".active", "")
-#        if (actionName not in self.actions):
-#            return
-#        # Report.
-#        st = pymjin2.State()
-#        key = "Target.{0}.selected".format(self.actions[actionName])
-#        st.set(key, "1")
-#        self.senv.reportStateChange(st)
-#        st.set(key, "0")
-#        self.senv.reportStateChange(st)
+    def onActionState(self, key, values):
+        print "onActionState", key, values
+        state = (values[0] == "1")
+        # Ignore activation.
+        if (state):
+            return
+        # Ignore other actions.
+        actionName = key.replace(".active", "")
+        if (actionName not in self.actions):
+            return
+        node = self.actions[actionName]
+        self.report(node, "moving", "0")
     def onSelection(self, key, values):
         nodeName = values[0]
         # Ignore deselection.
@@ -67,6 +62,19 @@ class TargetImpl(object):
         key = "target.{0}.{1}".format(node, property)
         st.set(key, value)
         self.senv.reportStateChange(st)
+    def setMoving(self, key, values):
+        v = key.split(".")
+        sceneName = v[1]
+        nodeName  = v[2]
+        node = sceneName + "." + nodeName
+        if (node not in self.selectable):
+            return
+        print "setMoving", node
+        s = self.selectable[node]
+        st = pymjin2.State()
+        st.set("{0}.node".format(s.pop), node)
+        st.set("{0}.active".format(s.pop), "1")
+        self.action.setState(st)
     def setSelectable(self, key, values):
         v = key.split(".")
         sceneName = v[1]
@@ -74,19 +82,22 @@ class TargetImpl(object):
         state     = (values[0] == "1")
         node = sceneName + "." + nodeName
         if (state):
-#            key = "{0}.{1}.{2}.clone".format(Target_ACTION_PRESS_TYPE,
-#                                             Target_ACTION_GROUP,
-#                                             Target_ACTION_PRESS_NAME)
-#            st = self.action.state([key])
-#            newGroupName = st.value(key)[0]
+            # Clone sequence action and its children.
+            key = "{0}.{1}.{2}.clone".format(TARGET_ACTION_TYPE_POP,
+                                             TARGET_ACTION_GROUP,
+                                             TARGET_ACTION_NAME_POP)
+            st = self.action.state([key])
+            newGroupName = st.value(key)[0]
             s = TargetState()
+            s.setActionGroup(newGroupName)
             self.selectable[node] = s
-            #s.setActionGroup(newGroupName)
-            #self.actions[bs.down] = node
+            self.actions[s.up]  = node
+            self.actions[s.pop] = node
         # Remove disabled.
         elif (node in self.selectable):
             s = self.selectable[node]
-            #del self.actions[bs.down]
+            del self.actions[s.up]
+            del self.actions[s.pop]
             del self.selectable[node]
     def setSelected(self, key, values):
         print "setSelected", key, values
@@ -103,11 +114,12 @@ class Target:
         # Listen to node selection.
         key = "selector..selectedNode"
         self.subs.subscribe(scene, key, self.impl, "onSelection")
-        # Listen to Target down state.
-#        key = "{0}..{1}.active".format(Target_ACTION_DOWN_TYPE,
-#                                       Target_ACTION_DOWN_NAME)
-#        self.subs.subscribe(action, key, self.impl, "onActionState")
+        # Listen to target pop state.
+        key = "{0}..{1}.active".format(TARGET_ACTION_TYPE_POP,
+                                       TARGET_ACTION_NAME_POP)
+        self.subs.subscribe(action, key, self.impl, "onActionState")
         # Provide "Target" API.
+        self.prov.provide("target...moving",     self.impl, "setMoving")
         self.prov.provide("target...selectable", self.impl, "setSelectable")
         self.prov.provide("target...selected",   self.impl, "setSelected")
         print "{0} Target.__init__".format(id(self))
