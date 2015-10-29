@@ -2,12 +2,23 @@ moveBy
     default
         liftTarget
             point = 0 0 0 0
-            point = 3000 0 0 0.3
+            point = 2000 0 0 0.1
         lowerTarget
             point = 0 0 0 0
-            point = 3000 0 0 -0.3
+            point = 2000 0 0 -0.1
+rotateBy
+    default
+        lowerLeverage
+            point = 0 0 0 0
+            point = 2000 90 0 0
+        liftLeverage
+            point = 0 0 0 0
+            point = 2000 -90 0 0
 sequence
     default
         popTarget
             action = liftTarget
             action = lowerTarget
+        catchTarget
+            action = lowerLeverage
+            action = liftLeverage

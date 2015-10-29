@@ -20,6 +20,15 @@ class MainImpl(object):
         # Derefer.
         self.scene = None
         self.senv  = None
+    def onLeverageMotion(self, key, values):
+        v = key.split(".")
+        sceneName = v[1]
+        property = v[3]
+        state = values[0]
+        # Ignore activation.
+        if (state != "0"):
+            return
+        print "onLeverageMotion", key, values
     def onTargetMotion(self, key, values):
         v = key.split(".")
         sceneName = v[1]
@@ -89,6 +98,9 @@ class Main:
         # Listen to target motion.
         key = "target.{0}..moving".format(sceneName)
         self.subs.subscribe(scriptEnvironment, key, self.impl, "onTargetMotion")
+        # Listen to leverage motion.
+        key = "leverage.{0}..moving".format(sceneName)
+        self.subs.subscribe(scriptEnvironment, key, self.impl, "onLeverageMotion")
         # Start popping the targets.
         self.impl.popRandomTarget(sceneName)
         print "{0} Main.__init__({1}, {2})".format(id(self), sceneName, nodeName)
