@@ -4,17 +4,12 @@ import random
 
 MAIN_DEPENDENCY_LEVERAGE = "scripts/Leverage.py"
 MAIN_DEPENDENCY_TARGET   = "scripts/Target.py"
-                        
-MAIN_LEVERAGES = ["leverage1",
-                  "leverage2",
-                  "leverage3",
-                  "leverage4",
-                  "leverage5"]
-MAIN_TARGETS = ["target1",
-                "target2",
-                "target3",
-                "target4",
-                "target5"]
+
+MAIN_TARGETS_LEVERAGES = { "target1" : "leverage1",
+                           "target2" : "leverage2",
+                           "target3" : "leverage3",
+                           "target4" : "leverage4",
+                           "target5" : "leverage5" }
 
 class MainImpl(object):
     def __init__(self, scene, senv):
@@ -26,7 +21,6 @@ class MainImpl(object):
         self.scene = None
         self.senv  = None
     def onTargetMotion(self, key, values):
-        print "Main.onTargetMotion", key, values
         v = key.split(".")
         sceneName = v[1]
         property = v[3]
@@ -38,14 +32,22 @@ class MainImpl(object):
         if (property == "moving"):
             self.popRandomTarget(sceneName)
     def onTargetSelection(self, key, values):
+        # Ignore deselection.
+        if (values[0] != "1"):
+            return
         print "Main.onTargetSelection", key, values
-        #st = pymjin2.State()
-        #key = "leverage.
+        v = key.split(".")
+        sceneName = v[1]
+        nodeName  = MAIN_TARGETS_LEVERAGES[v[2]]
+        st = pymjin2.State()
+        key = "leverage.{0}.{1}.moving".format(sceneName, nodeName)
+        st.set(key, "1")
+        self.senv.setState(st)
     def popRandomTarget(self, sceneName):
-        random.seed(None)
-        id = random.randint(0, len(MAIN_TARGETS) - 1)
-        print "popping target", id
-        key = "target.{0}.{1}.moving".format(sceneName, MAIN_TARGETS[id])
+        random.seed(pymjin2.rand(True))
+        id = random.randint(0, len(MAIN_TARGETS_LEVERAGES) - 1)
+        targetName = MAIN_TARGETS_LEVERAGES.keys()[id]
+        key = "target.{0}.{1}.moving".format(sceneName, targetName)
         st = pymjin2.State()
         st.set(key, "1")
         self.senv.setState(st)
@@ -75,10 +77,10 @@ class Main:
         # Prepare.
         # Enable targets and leverages.
         st = pymjin2.State()
-        for t in MAIN_TARGETS:
-            key = "target.{0}.{1}.selectable".format(sceneName, t)
+        for k, v in MAIN_TARGETS_LEVERAGES.items():
+            key = "target.{0}.{1}.selectable".format(sceneName, k)
             st.set(key, "1")
-            key = "leverage.{0}.{1}.movable".format(sceneName, t)
+            key = "leverage.{0}.{1}.movable".format(sceneName, v)
             st.set(key, "1")
         self.senv.setState(st)
         # Listen to target selection.
@@ -87,7 +89,7 @@ class Main:
         # Listen to target motion.
         key = "target.{0}..moving".format(sceneName)
         self.subs.subscribe(scriptEnvironment, key, self.impl, "onTargetMotion")
-
+        # Start popping the targets.
         self.impl.popRandomTarget(sceneName)
         print "{0} Main.__init__({1}, {2})".format(id(self), sceneName, nodeName)
     def __del__(self):

@@ -9,8 +9,9 @@ TARGET_ACTION_NAME_POP = "popTarget"
 
 class TargetState(object):
     def __init__(self):
-        self.up  = None
-        self.pop = None
+        self.up     = None
+        self.pop    = None
+        self.moving = False
     def setActionGroup(self, groupName):
         self.up = "{0}.{1}.{2}".format(TARGET_ACTION_TYPE_UP,
                                        groupName,
@@ -34,7 +35,6 @@ class TargetImpl(object):
         self.action = None
         self.senv   = None
     def onActionState(self, key, values):
-        print "onActionState", key, values
         state = (values[0] == "1")
         # Ignore activation.
         if (state):
@@ -44,6 +44,8 @@ class TargetImpl(object):
         if (actionName not in self.actions):
             return
         node = self.actions[actionName]
+        s = self.selectable[node]
+        s.moving = False
         self.report(node, "moving", "0")
     def onSelection(self, key, values):
         nodeName = values[0]
@@ -54,6 +56,10 @@ class TargetImpl(object):
         sceneName = v[1]
         node = sceneName + "." + nodeName
         if (node not in self.selectable):
+            return
+        s = self.selectable[node]
+        # Ignore non-moving.
+        if (not s.moving):
             return
         self.report(node, "selected", "1")
         self.report(node, "selected", "0")
@@ -69,8 +75,8 @@ class TargetImpl(object):
         node = sceneName + "." + nodeName
         if (node not in self.selectable):
             return
-        print "setMoving", node
         s = self.selectable[node]
+        s.moving = True
         st = pymjin2.State()
         st.set("{0}.node".format(s.pop), node)
         st.set("{0}.active".format(s.pop), "1")
