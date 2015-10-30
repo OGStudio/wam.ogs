@@ -14,10 +14,15 @@ rotateBy
         liftLeverage
             point = 0 0 0 0
             point = 2000 -90 0 0
+delay
+    default
+        waitForLeverage
+            delay = 2000
 sequence
     default
         popTarget
             action = liftTarget
+            action = waitForLeverage
             action = lowerTarget
         catchTarget
             action = lowerLeverage
