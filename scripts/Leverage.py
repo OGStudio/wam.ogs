@@ -2,20 +2,20 @@
 import pymjin2
 
 LEVERAGE_ACTION_GROUP      = "default"
-LEVERAGE_ACTION_TYPE_UP    = "rotateBy"
+LEVERAGE_ACTION_TYPE_DOWN  = "rotateBy"
 LEVERAGE_ACTION_TYPE_CATCH = "sequence"
-LEVERAGE_ACTION_NAME_UP    = "liftLeverage"
+LEVERAGE_ACTION_NAME_DOWN  = "lowerLeverage"
 LEVERAGE_ACTION_NAME_CATCH = "catchTarget"
 
 class LeverageState(object):
     def __init__(self):
-        self.up     = None
+        self.down   = None
         self.catch  = None
         self.moving = None
     def setActionGroup(self, groupName):
-        self.up = "{0}.{1}.{2}".format(LEVERAGE_ACTION_TYPE_UP,
-                                       groupName,
-                                       LEVERAGE_ACTION_NAME_UP)
+        self.down = "{0}.{1}.{2}".format(LEVERAGE_ACTION_TYPE_DOWN,
+                                         groupName,
+                                         LEVERAGE_ACTION_NAME_DOWN)
         self.catch = "{0}.{1}.{2}".format(LEVERAGE_ACTION_TYPE_CATCH,
                                           groupName,
                                           LEVERAGE_ACTION_NAME_CATCH)
@@ -45,13 +45,19 @@ class LeverageImpl(object):
             return
         node = self.actions[actionName]
         s = self.movable[node]
-        s.moving = False
-        self.report(node, "moving", "0")
+        if (actionName == s.catch):
+            s.moving = False
+            self.report(node, "moving", "0")
+        elif (actionName == s.down):
+            self.report(node, "hit", "1")
+            self.report(node, "hit", "0")
     def report(self, node, property, value):
         st = pymjin2.State()
         key = "leverage.{0}.{1}".format(node, property)
         st.set(key, value)
         self.senv.reportStateChange(st)
+    def setHit(self, key, values):
+        print "setHit", key, values
     def setMovable(self, key, values):
         v = key.split(".")
         sceneName = v[1]
@@ -68,16 +74,15 @@ class LeverageImpl(object):
             s = LeverageState()
             s.setActionGroup(newGroupName)
             self.movable[node] = s
-            self.actions[s.up]    = node
+            self.actions[s.down]  = node
             self.actions[s.catch] = node
         # Remove disabled.
         elif (node in self.movable):
             s = self.movable[node]
-            del self.actions[s.up]
+            del self.actions[s.down]
             del self.actions[s.catch]
             del self.movable[node]
     def setMoving(self, key, values):
-        print "setMoving", key, values
         v = key.split(".")
         sceneName = v[1]
         nodeName  = v[2]
@@ -100,11 +105,16 @@ class Leverage:
                                      "Leverage",
                                      "Turn any node into WAM Leverage")
         # Prepare.
-        # Listen to leverage state.
+        # Listen to leverage catch action.
         key = "{0}..{1}.active".format(LEVERAGE_ACTION_TYPE_CATCH,
                                        LEVERAGE_ACTION_NAME_CATCH)
         self.subs.subscribe(action, key, self.impl, "onActionState")
+        # Listen to leverage down action.
+        key = "{0}..{1}.active".format(LEVERAGE_ACTION_TYPE_DOWN,
+                                       LEVERAGE_ACTION_NAME_DOWN)
+        self.subs.subscribe(action, key, self.impl, "onActionState")
         # Provide "Leverage" API.
+        self.prov.provide("leverage...hit",     self.impl, "setHit")
         self.prov.provide("leverage...movable", self.impl, "setMovable")
         self.prov.provide("leverage...moving",  self.impl, "setMoving")
         print "{0} Leverage.__init__".format(id(self))

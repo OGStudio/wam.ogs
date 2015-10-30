@@ -16,10 +16,28 @@ class MainImpl(object):
         # Refer.
         self.scene = scene
         self.senv  = senv
+        # Create.
+        self.activeTarget = None
+        self.hitCount     = 0
     def __del__(self):
         # Derefer.
         self.scene = None
         self.senv  = None
+    def onLeverageHit(self, key, values):
+        # Ignore dehitting.
+        if (values[0] == "0"):
+            return
+        # Nothing to hit.
+        if (not self.activeTarget):
+            return
+        targetLeverage = MAIN_TARGETS_LEVERAGES[self.activeTarget]
+        v = key.split(".")
+        if (targetLeverage == v[2]):
+            self.hitCount = self.hitCount + 1
+            print "{0} did a successful hit of {1}. Total: {2}".format(
+                targetLeverage,
+                self.activeTarget,
+                self.hitCount)
     def onLeverageMotion(self, key, values):
         v = key.split(".")
         sceneName = v[1]
@@ -30,7 +48,11 @@ class MainImpl(object):
             return
         print "onLeverageMotion", key, values
     def onTargetCatching(self, key, values):
-        print "onTargetCatching", key, values
+        if (values[0] == "0"):
+            self.activeTarget = None
+            return
+        v = key.split(".")
+        self.activeTarget = v[2]
     def onTargetMotion(self, key, values):
         v = key.split(".")
         sceneName = v[1]
@@ -46,7 +68,6 @@ class MainImpl(object):
         # Ignore deselection.
         if (values[0] != "1"):
             return
-        print "Main.onTargetSelection", key, values
         v = key.split(".")
         sceneName = v[1]
         nodeName  = MAIN_TARGETS_LEVERAGES[v[2]]
@@ -104,8 +125,11 @@ class Main:
         key = "target.{0}..moving".format(sceneName)
         self.subs.subscribe(scriptEnvironment, key, self.impl, "onTargetMotion")
         # Listen to leverage motion.
-        key = "leverage.{0}..moving".format(sceneName)
-        self.subs.subscribe(scriptEnvironment, key, self.impl, "onLeverageMotion")
+#        key = "leverage.{0}..moving".format(sceneName)
+#        self.subs.subscribe(scriptEnvironment, key, self.impl, "onLeverageMotion")
+        # Listen to leverage hitting.
+        key = "leverage.{0}..hit".format(sceneName)
+        self.subs.subscribe(scriptEnvironment, key, self.impl, "onLeverageHit")
         # Start popping the targets.
         self.impl.popRandomTarget(sceneName)
         print "{0} Main.__init__({1}, {2})".format(id(self), sceneName, nodeName)
