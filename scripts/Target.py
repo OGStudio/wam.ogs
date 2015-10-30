@@ -1,21 +1,21 @@
 
 import pymjin2
 
-TARGET_ACTION_GROUP    = "default"
-TARGET_ACTION_TYPE_UP  = "moveBy"
-TARGET_ACTION_TYPE_POP = "sequence"
-TARGET_ACTION_NAME_UP  = "liftTarget"
-TARGET_ACTION_NAME_POP = "popTarget"
+TARGET_ACTION_GROUP     = "default"
+TARGET_ACTION_TYPE_WAIT = "delay"
+TARGET_ACTION_TYPE_POP  = "sequence"
+TARGET_ACTION_NAME_WAIT = "waitForLeverage"
+TARGET_ACTION_NAME_POP  = "popTarget"
 
 class TargetState(object):
     def __init__(self):
-        self.up     = None
+        self.wait   = None
         self.pop    = None
         self.moving = False
     def setActionGroup(self, groupName):
-        self.up = "{0}.{1}.{2}".format(TARGET_ACTION_TYPE_UP,
-                                       groupName,
-                                       TARGET_ACTION_NAME_UP)
+        self.wait = "{0}.{1}.{2}".format(TARGET_ACTION_TYPE_WAIT,
+                                         groupName,
+                                         TARGET_ACTION_NAME_WAIT)
         self.pop = "{0}.{1}.{2}".format(TARGET_ACTION_TYPE_POP,
                                         groupName,
                                         TARGET_ACTION_NAME_POP)
@@ -36,17 +36,20 @@ class TargetImpl(object):
         self.senv   = None
     def onActionState(self, key, values):
         state = (values[0] == "1")
-        # Ignore activation.
-        if (state):
-            return
         # Ignore other actions.
         actionName = key.replace(".active", "")
         if (actionName not in self.actions):
             return
         node = self.actions[actionName]
         s = self.selectable[node]
-        s.moving = False
-        self.report(node, "moving", "0")
+        if (actionName == s.pop):
+            # Ignore activation.
+            if (state):
+                return
+            s.moving = False
+            self.report(node, "moving", "0")
+        elif (actionName == s.wait):
+            self.report(node, "catch", values[0])
     def onSelection(self, key, values):
         nodeName = values[0]
         # Ignore deselection.
@@ -68,6 +71,8 @@ class TargetImpl(object):
         key = "target.{0}.{1}".format(node, property)
         st.set(key, value)
         self.senv.reportStateChange(st)
+    def setCatch(self, key, values):
+        print "setCatch", key, values
     def setMoving(self, key, values):
         v = key.split(".")
         sceneName = v[1]
@@ -97,12 +102,12 @@ class TargetImpl(object):
             s = TargetState()
             s.setActionGroup(newGroupName)
             self.selectable[node] = s
-            self.actions[s.up]  = node
-            self.actions[s.pop] = node
+            self.actions[s.wait] = node
+            self.actions[s.pop]  = node
         # Remove disabled.
         elif (node in self.selectable):
             s = self.selectable[node]
-            del self.actions[s.up]
+            del self.actions[s.wait]
             del self.actions[s.pop]
             del self.selectable[node]
     def setSelected(self, key, values):
@@ -124,7 +129,12 @@ class Target:
         key = "{0}..{1}.active".format(TARGET_ACTION_TYPE_POP,
                                        TARGET_ACTION_NAME_POP)
         self.subs.subscribe(action, key, self.impl, "onActionState")
+        # Listen to target delay state.
+        key = "{0}..{1}.active".format(TARGET_ACTION_TYPE_WAIT,
+                                       TARGET_ACTION_NAME_WAIT)
+        self.subs.subscribe(action, key, self.impl, "onActionState")
         # Provide "Target" API.
+        self.prov.provide("target...catch",      self.impl, "setCatch")
         self.prov.provide("target...moving",     self.impl, "setMoving")
         self.prov.provide("target...selectable", self.impl, "setSelectable")
         self.prov.provide("target...selected",   self.impl, "setSelected")

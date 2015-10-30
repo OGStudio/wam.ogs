@@ -29,6 +29,8 @@ class MainImpl(object):
         if (state != "0"):
             return
         print "onLeverageMotion", key, values
+    def onTargetCatching(self, key, values):
+        print "onTargetCatching", key, values
     def onTargetMotion(self, key, values):
         v = key.split(".")
         sceneName = v[1]
@@ -95,6 +97,9 @@ class Main:
         # Listen to target selection.
         key = "target.{0}..selected".format(sceneName)
         self.subs.subscribe(scriptEnvironment, key, self.impl, "onTargetSelection")
+        # Listen to target catching availability.
+        key = "target.{0}..catch".format(sceneName)
+        self.subs.subscribe(scriptEnvironment, key, self.impl, "onTargetCatching")
         # Listen to target motion.
         key = "target.{0}..moving".format(sceneName)
         self.subs.subscribe(scriptEnvironment, key, self.impl, "onTargetMotion")
