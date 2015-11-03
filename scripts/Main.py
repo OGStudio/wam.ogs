@@ -10,6 +10,10 @@ MAIN_TARGETS_LEVERAGES = { "target1" : "leverage1",
                            "target3" : "leverage3",
                            "target4" : "leverage4",
                            "target5" : "leverage5" }
+MAIN_TIMER_LIGHT_PREFIX = "time"
+MAIN_TIMER_LIGHTS       = 21
+MAIN_TIMER_LIGHT_ON     = "time_on"
+MAIN_TIMER_LIGHT_OFF    = "time_off"
 
 class MainImpl(object):
     def __init__(self, scene, senv):
@@ -19,6 +23,7 @@ class MainImpl(object):
         # Create.
         self.activeTarget = None
         self.hitCount     = 0
+        self.timeLeft     = MAIN_TIMER_LIGHTS * 2
     def __del__(self):
         # Derefer.
         self.scene = None
@@ -61,9 +66,9 @@ class MainImpl(object):
         # Ignore activation.
         if (state != "0"):
             return
-        # Motion finished. Pop another target.
+        # Motion finished. Proceed with the game.
         if (property == "moving"):
-            self.popRandomTarget(sceneName)
+            self.step(sceneName)
     def onTargetSelection(self, key, values):
         # Ignore deselection.
         if (values[0] != "1"):
@@ -83,6 +88,31 @@ class MainImpl(object):
         st = pymjin2.State()
         st.set(key, "1")
         self.senv.setState(st)
+    def setTimer(self, sceneName, value):
+        print "setTimer", value
+        st = pymjin2.State()
+        for i in range(1, MAIN_TIMER_LIGHTS + 1):
+            mat = MAIN_TIMER_LIGHT_ON
+            if (i > value):
+                mat = MAIN_TIMER_LIGHT_OFF
+            key = "node.{0}.{1}{2}.material".format(sceneName,
+                                                    MAIN_TIMER_LIGHT_PREFIX,
+                                                    i)
+
+            st.set(key, mat)
+        self.scene.setState(st)
+    def step(self, sceneName):
+        # Do not proceed if time is off.
+        if (self.timeLeft < 0):
+            print "Game over"
+            return
+        self.popRandomTarget(sceneName)
+        # Tick the timer each target pop cycle iteration.
+        self.tickTimer(sceneName)
+    def tickTimer(self, sceneName):
+        self.timeLeft = self.timeLeft - 1
+        print "tickTimer. left:", self.timeLeft
+        self.setTimer(sceneName, self.timeLeft / 2 + 1)
 
 class Main:
     def __init__(self,
@@ -130,8 +160,8 @@ class Main:
         # Listen to leverage hitting.
         key = "leverage.{0}..hit".format(sceneName)
         self.subs.subscribe(scriptEnvironment, key, self.impl, "onLeverageHit")
-        # Start popping the targets.
-        self.impl.popRandomTarget(sceneName)
+        # Start the game.
+        self.impl.step(sceneName)
         print "{0} Main.__init__({1}, {2})".format(id(self), sceneName, nodeName)
     def __del__(self):
         # Tear down.

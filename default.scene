@@ -7,7 +7,7 @@ node
             light = default
         target1
             parent = ROOT
-            position = -0.750000 -0.750000 -0.500000
+            position = -0.750000 -0.750000 -0.5
             material = target
             model = models/target.osgt
         base
@@ -18,13 +18,13 @@ node
         leverage3
             parent = ROOT
             position = 0.000000 0.250000 0.350000
-            rotation = 270.000000 0.000000 0.000000
+            rotation = 270.000244 0.000000 0.000000
             material = leverage
             model = models/leverage.osgt
         leverage4
             parent = ROOT
             position = 0.370000 0.630000 0.350000
-            rotation = 270.000000 0.000000 0.000000
+            rotation = 269.999817 0.000000 0.000000
             material = leverage
             model = models/leverage.osgt
         leverage2
@@ -57,11 +57,145 @@ node
             model = models/target.osgt
         target3
             parent = ROOT
-            position = 0.000000 -0.750000 -0.500000
+            position = 0.000000 -0.750000 -0.500001
             material = target
             model = models/target.osgt
         target5
             parent = ROOT
-            position = 0.750000 -0.750000 -0.500000
+            position = 0.750000 -0.750000 -0.500001
             material = target
             model = models/target.osgt
+        scoreBase
+            parent = ROOT
+            material = score_base
+            model = models/score_base.osgt
+        score
+            parent = ROOT
+            material = score
+            model = models/score.osgt
+        time1
+            parent = ROOT
+            position = -1.900000 -1.100000 -0.600000
+            scale = 0.100000 0.100000 0.100000
+            material = time_on
+            model = models/box.osgt
+        time2
+            parent = ROOT
+            position = -1.700000 -1.100000 -0.600000
+            scale = 0.100000 0.100000 0.100000
+            material = time_on
+            model = models/box.osgt
+        time3
+            parent = ROOT
+            position = -1.500000 -1.100000 -0.600000
+            scale = 0.100000 0.100000 0.100000
+            material = time_on
+            model = models/box.osgt
+        time4
+            parent = ROOT
+            position = -1.300000 -1.100000 -0.600000
+            scale = 0.100000 0.100000 0.100000
+            material = time_on
+            model = models/box.osgt
+        time5
+            parent = ROOT
+            position = -1.300000 -1.100000 -0.600000
+            scale = 0.100000 0.100000 0.100000
+            material = time_on
+            model = models/box.osgt
+        time6
+            parent = ROOT
+            position = -1.100000 -1.100000 -0.600000
+            scale = 0.100000 0.100000 0.100000
+            material = time_on
+            model = models/box.osgt
+        time7
+            parent = ROOT
+            position = -0.900000 -1.100000 -0.600000
+            scale = 0.100000 0.100000 0.100000
+            material = time_on
+            model = models/box.osgt
+        time8
+            parent = ROOT
+            position = -0.700000 -1.100000 -0.600000
+            scale = 0.100000 0.100000 0.100000
+            material = time_on
+            model = models/box.osgt
+        time9
+            parent = ROOT
+            position = -0.500000 -1.100000 -0.600000
+            scale = 0.100000 0.100000 0.100000
+            material = time_on
+            model = models/box.osgt
+        time10
+            parent = ROOT
+            position = -0.300000 -1.100000 -0.600000
+            scale = 0.100000 0.100000 0.100000
+            material = time_on
+            model = models/box.osgt
+        time11
+            parent = ROOT
+            position = -0.100000 -1.100000 -0.600000
+            scale = 0.100000 0.100000 0.100000
+            material = time_on
+            model = models/box.osgt
+        time12
+            parent = ROOT
+            position = 0.100000 -1.100000 -0.600000
+            scale = 0.100000 0.100000 0.100000
+            material = time_on
+            model = models/box.osgt
+        time13
+            parent = ROOT
+            position = 0.300000 -1.100000 -0.600000
+            scale = 0.100000 0.100000 0.100000
+            material = time_on
+            model = models/box.osgt
+        time14
+            parent = ROOT
+            position = 0.500000 -1.100000 -0.600000
+            scale = 0.100000 0.100000 0.100000
+            material = time_on
+            model = models/box.osgt
+        time15
+            parent = ROOT
+            position = 0.700000 -1.100000 -0.600000
+            scale = 0.100000 0.100000 0.100000
+            material = time_on
+            model = models/box.osgt
+        time16
+            parent = ROOT
+            position = 0.900000 -1.100000 -0.600000
+            scale = 0.100000 0.100000 0.100000
+            material = time_on
+            model = models/box.osgt
+        time17
+            parent = ROOT
+            position = 1.100000 -1.100000 -0.600000
+            scale = 0.100000 0.100000 0.100000
+            material = time_on
+            model = models/box.osgt
+        time18
+            parent = ROOT
+            position = 1.300000 -1.100000 -0.600000
+            scale = 0.100000 0.100000 0.100000
+            material = time_on
+            model = models/box.osgt
+        time19
+            parent = ROOT
+            position = 1.500000 -1.100000 -0.600000
+            scale = 0.100000 0.100000 0.100000
+            material = time_on
+            model = models/box.osgt
+        time20
+            parent = ROOT
+            position = 1.700000 -1.100000 -0.600000
+            scale = 0.100000 0.100000 0.100000
+            material = time_on
+            model = models/box.osgt
+        time21
+            parent = ROOT
+            position = 1.900000 -1.100000 -0.600000
+            scale = 0.100000 0.100000 0.100000
+            material = time_on
+            model = models/box.osgt

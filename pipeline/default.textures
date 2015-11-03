@@ -17,4 +17,13 @@
     <texture name="wam_tex" template="textureTemplate">
         <file>pipeline/textures/wam_tex.png</file>
     </texture>
+    <texture name="score_n" template="textureTemplate">
+        <file>pipeline/textures/score_n.png</file>
+    </texture>
+    <texture name="score_base_n" template="textureTemplate">
+        <file>pipeline/textures/score_base_n.png</file>
+    </texture>
+    <texture name="time_tex" template="textureTemplate">
+        <file>pipeline/textures/time_tex.png</file>
+    </texture>
 </compositor>
