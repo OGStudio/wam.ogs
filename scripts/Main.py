@@ -11,9 +11,13 @@ MAIN_TARGETS_LEVERAGES = { "target1" : "leverage1",
                            "target4" : "leverage4",
                            "target5" : "leverage5" }
 MAIN_TIMER_LIGHT_PREFIX = "time"
-MAIN_TIMER_LIGHTS       = 21
+MAIN_TIMER_LIGHTS       = 20
 MAIN_TIMER_LIGHT_ON     = "time_on"
 MAIN_TIMER_LIGHT_OFF    = "time_off"
+MAIN_SCORE_LIGHT_PREFIX = "score"
+MAIN_SCORE_LIGHTS       = 20
+MAIN_SCORE_LIGHT_ON     = "score_on"
+MAIN_SCORE_LIGHT_OFF    = "score_off"
 
 class MainImpl(object):
     def __init__(self, scene, senv):
@@ -22,7 +26,7 @@ class MainImpl(object):
         self.senv  = senv
         # Create.
         self.activeTarget = None
-        self.hitCount     = 0
+        self.score        = 0
         self.timeLeft     = MAIN_TIMER_LIGHTS * 2
     def __del__(self):
         # Derefer.
@@ -35,14 +39,13 @@ class MainImpl(object):
         # Nothing to hit.
         if (not self.activeTarget):
             return
+        v = key.split(".")
+        sceneName = v[1]
         targetLeverage = MAIN_TARGETS_LEVERAGES[self.activeTarget]
         v = key.split(".")
         if (targetLeverage == v[2]):
-            self.hitCount = self.hitCount + 1
-            print "{0} did a successful hit of {1}. Total: {2}".format(
-                targetLeverage,
-                self.activeTarget,
-                self.hitCount)
+            self.score = self.score + 1
+            self.setScore(sceneName, self.score)
     def onLeverageMotion(self, key, values):
         v = key.split(".")
         sceneName = v[1]
@@ -88,8 +91,20 @@ class MainImpl(object):
         st = pymjin2.State()
         st.set(key, "1")
         self.senv.setState(st)
+    def setScore(self, sceneName, value):
+        print "setScore", value
+        st = pymjin2.State()
+        for i in range(0, MAIN_SCORE_LIGHTS):
+            mat = MAIN_SCORE_LIGHT_OFF
+            if (i < value):
+                mat = MAIN_TIMER_LIGHT_ON
+            key = "node.{0}.{1}{2}.material".format(sceneName,
+                                                    MAIN_SCORE_LIGHT_PREFIX,
+                                                    i + 1)
+
+            st.set(key, mat)
+        self.scene.setState(st)
     def setTimer(self, sceneName, value):
-        print "setTimer", value
         st = pymjin2.State()
         for i in range(1, MAIN_TIMER_LIGHTS + 1):
             mat = MAIN_TIMER_LIGHT_ON
@@ -111,7 +126,6 @@ class MainImpl(object):
         self.tickTimer(sceneName)
     def tickTimer(self, sceneName):
         self.timeLeft = self.timeLeft - 1
-        print "tickTimer. left:", self.timeLeft
         self.setTimer(sceneName, self.timeLeft / 2 + 1)
 
 class Main:

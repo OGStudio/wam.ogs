@@ -7,14 +7,13 @@ node
             light = default
         target1
             parent = ROOT
-            position = -0.750000 -0.750000 -0.5
+            position = -0.750000 -0.750000 -0.500000
             material = target
             model = models/target.osgt
         base
             parent = ROOT
             material = base
             model = models/base.osgt
-            script = scripts/Main.py
         leverage3
             parent = ROOT
             position = 0.000000 0.250000 0.350000
@@ -99,103 +98,217 @@ node
             model = models/box.osgt
         time5
             parent = ROOT
-            position = -1.300000 -1.100000 -0.600000
+            position = -1.100000 -1.100000 -0.600000
             scale = 0.100000 0.100000 0.100000
             material = time_on
             model = models/box.osgt
         time6
             parent = ROOT
-            position = -1.100000 -1.100000 -0.600000
+            position = -0.900000 -1.100000 -0.600000
             scale = 0.100000 0.100000 0.100000
             material = time_on
             model = models/box.osgt
         time7
             parent = ROOT
-            position = -0.900000 -1.100000 -0.600000
+            position = -0.700000 -1.100000 -0.600000
             scale = 0.100000 0.100000 0.100000
             material = time_on
             model = models/box.osgt
         time8
             parent = ROOT
-            position = -0.700000 -1.100000 -0.600000
+            position = -0.500000 -1.100000 -0.600000
             scale = 0.100000 0.100000 0.100000
             material = time_on
             model = models/box.osgt
         time9
             parent = ROOT
-            position = -0.500000 -1.100000 -0.600000
+            position = -0.300000 -1.100000 -0.600000
             scale = 0.100000 0.100000 0.100000
             material = time_on
             model = models/box.osgt
         time10
             parent = ROOT
-            position = -0.300000 -1.100000 -0.600000
+            position = -0.100000 -1.100000 -0.600000
             scale = 0.100000 0.100000 0.100000
             material = time_on
             model = models/box.osgt
         time11
             parent = ROOT
-            position = -0.100000 -1.100000 -0.600000
+            position = 0.100000 -1.100000 -0.600000
             scale = 0.100000 0.100000 0.100000
             material = time_on
             model = models/box.osgt
         time12
             parent = ROOT
-            position = 0.100000 -1.100000 -0.600000
+            position = 0.300000 -1.100000 -0.600000
             scale = 0.100000 0.100000 0.100000
             material = time_on
             model = models/box.osgt
         time13
             parent = ROOT
-            position = 0.300000 -1.100000 -0.600000
+            position = 0.500000 -1.100000 -0.600000
             scale = 0.100000 0.100000 0.100000
             material = time_on
             model = models/box.osgt
         time14
             parent = ROOT
-            position = 0.500000 -1.100000 -0.600000
+            position = 0.700000 -1.100000 -0.600000
             scale = 0.100000 0.100000 0.100000
             material = time_on
             model = models/box.osgt
         time15
             parent = ROOT
-            position = 0.700000 -1.100000 -0.600000
+            position = 0.900000 -1.100000 -0.600000
             scale = 0.100000 0.100000 0.100000
             material = time_on
             model = models/box.osgt
         time16
             parent = ROOT
-            position = 0.900000 -1.100000 -0.600000
+            position = 1.100000 -1.100000 -0.600000
             scale = 0.100000 0.100000 0.100000
             material = time_on
             model = models/box.osgt
         time17
             parent = ROOT
-            position = 1.100000 -1.100000 -0.600000
+            position = 1.300000 -1.100000 -0.600000
             scale = 0.100000 0.100000 0.100000
             material = time_on
             model = models/box.osgt
         time18
             parent = ROOT
-            position = 1.300000 -1.100000 -0.600000
+            position = 1.500000 -1.100000 -0.600000
             scale = 0.100000 0.100000 0.100000
             material = time_on
             model = models/box.osgt
         time19
             parent = ROOT
-            position = 1.500000 -1.100000 -0.600000
+            position = 1.700000 -1.100000 -0.600000
             scale = 0.100000 0.100000 0.100000
             material = time_on
             model = models/box.osgt
         time20
             parent = ROOT
-            position = 1.700000 -1.100000 -0.600000
-            scale = 0.100000 0.100000 0.100000
-            material = time_on
-            model = models/box.osgt
-        time21
-            parent = ROOT
             position = 1.900000 -1.100000 -0.600000
             scale = 0.100000 0.100000 0.100000
             material = time_on
+            model = models/box.osgt
+        score1
+            parent = ROOT
+            position = -1.900000 -1.900000 -0.600000
+            scale = 0.100000 0.100000 0.100000
+            material = score_off
+            model = models/box.osgt
+        score2
+            parent = ROOT
+            position = -1.700000 -1.900000 -0.600000
+            scale = 0.100000 0.100000 0.100000
+            material = score_off
+            model = models/box.osgt
+        score3
+            parent = ROOT
+            position = -1.500000 -1.900000 -0.600000
+            scale = 0.100000 0.100000 0.100000
+            material = score_off
+            model = models/box.osgt
+        score4
+            parent = ROOT
+            position = -1.300000 -1.900000 -0.600000
+            scale = 0.100000 0.100000 0.100000
+            material = score_off
+            model = models/box.osgt
+        score5
+            parent = ROOT
+            position = -1.100000 -1.900000 -0.600000
+            scale = 0.100000 0.100000 0.100000
+            material = score_off
+            model = models/box.osgt
+        score6
+            parent = ROOT
+            position = -0.900000 -1.900000 -0.600000
+            scale = 0.100000 0.100000 0.100000
+            material = score_off
+            model = models/box.osgt
+        score7
+            parent = ROOT
+            position = -0.700000 -1.900000 -0.600000
+            scale = 0.100000 0.100000 0.100000
+            material = score_off
+            model = models/box.osgt
+        score8
+            parent = ROOT
+            position = -0.500000 -1.900000 -0.600000
+            scale = 0.100000 0.100000 0.100000
+            material = score_off
+            model = models/box.osgt
+        score9
+            parent = ROOT
+            position = -0.300000 -1.900000 -0.600000
+            scale = 0.100000 0.100000 0.100000
+            material = score_off
+            model = models/box.osgt
+        score10
+            parent = ROOT
+            position = -0.100000 -1.900000 -0.600000
+            scale = 0.100000 0.100000 0.100000
+            material = score_off
+            model = models/box.osgt
+        score11
+            parent = ROOT
+            position = 0.100000 -1.900000 -0.600000
+            scale = 0.100000 0.100000 0.100000
+            material = score_off
+            model = models/box.osgt
+        score12
+            parent = ROOT
+            position = 0.300000 -1.900000 -0.600000
+            scale = 0.100000 0.100000 0.100000
+            material = score_off
+            model = models/box.osgt
+        score13
+            parent = ROOT
+            position = 0.500000 -1.900000 -0.600000
+            scale = 0.100000 0.100000 0.100000
+            material = score_off
+            model = models/box.osgt
+        score14
+            parent = ROOT
+            position = 0.700000 -1.900000 -0.600000
+            scale = 0.100000 0.100000 0.100000
+            material = score_off
+            model = models/box.osgt
+        score15
+            parent = ROOT
+            position = 0.900000 -1.900000 -0.600000
+            scale = 0.100000 0.100000 0.100000
+            material = score_off
+            model = models/box.osgt
+        score16
+            parent = ROOT
+            position = 1.100000 -1.900000 -0.600000
+            scale = 0.100000 0.100000 0.100000
+            material = score_off
+            model = models/box.osgt
+        score17
+            parent = ROOT
+            position = 1.300000 -1.900000 -0.600000
+            scale = 0.100000 0.100000 0.100000
+            material = score_off
+            model = models/box.osgt
+        score18
+            parent = ROOT
+            position = 1.500000 -1.900000 -0.600000
+            scale = 0.100000 0.100000 0.100000
+            material = score_off
+            model = models/box.osgt
+        score19
+            parent = ROOT
+            position = 1.700000 -1.900000 -0.600000
+            scale = 0.100000 0.100000 0.100000
+            material = score_off
+            model = models/box.osgt
+        score20
+            parent = ROOT
+            position = 1.900000 -1.900000 -0.600000
+            scale = 0.100000 0.100000 0.100000
+            material = score_off
             model = models/box.osgt
