@@ -97,7 +97,7 @@ class MainImpl(object):
         for i in range(0, MAIN_SCORE_LIGHTS):
             mat = MAIN_SCORE_LIGHT_OFF
             if (i < value):
-                mat = MAIN_TIMER_LIGHT_ON
+                mat = MAIN_SCORE_LIGHT_ON
             key = "node.{0}.{1}{2}.material".format(sceneName,
                                                     MAIN_SCORE_LIGHT_PREFIX,
                                                     i + 1)
