@@ -316,7 +316,9 @@ node
             rotation = 270.000000 0.000000 0.000000
             material = leverage
             model = models/leverage.osgt
-        dddss
+        follower
             parent = ROOT
-            position = -1.570000 0.000000 0.000000
+            position = 0.000000 -1.000000 0.200000
+            scale = 0.050000 0.050000 0.050000
+            material = score_on
             model = models/box.osgt

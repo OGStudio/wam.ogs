@@ -1,4 +1,4 @@
-moveBy
+move
     default
         liftTarget
             point = 0 0 0 0
@@ -6,6 +6,9 @@ moveBy
         lowerTarget
             point = 0 0 0 0
             point = 500 0 0 -0.1
+        followTarget
+            relative = 0
+            node = default.follower
 rotateBy
     default
         lowerLeverage

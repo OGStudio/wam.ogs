@@ -5,11 +5,14 @@ import random
 MAIN_DEPENDENCY_LEVERAGE = "scripts/Leverage.py"
 MAIN_DEPENDENCY_TARGET   = "scripts/Target.py"
 
-MAIN_TARGETS_LEVERAGES = { "target1" : "leverage1",
-                           "target2" : "leverage2",
-                           "target3" : "leverage3",
-                           "target4" : "leverage4",
-                           "target5" : "leverage5" }
+MAIN_FOLLOWER_ACTION    = "move.default.followTarget"
+MAIN_FOLLOWER_NAME      = "follower"
+MAIN_FOLLOWER_SYNC_TIME = 1000
+MAIN_TARGETS_LEVERAGES  = { "target1" : "leverage1",
+                            "target2" : "leverage2",
+                            "target3" : "leverage3",
+                            "target4" : "leverage4",
+                            "target5" : "leverage5" }
 MAIN_TIMER_LIGHT_PREFIX = "time"
 MAIN_TIMER_LIGHTS       = 20
 MAIN_TIMER_LIGHT_ON     = "time_on"
@@ -20,18 +23,29 @@ MAIN_SCORE_LIGHT_ON     = "score_on"
 MAIN_SCORE_LIGHT_OFF    = "score_off"
 
 class MainImpl(object):
-    def __init__(self, scene, senv):
+    def __init__(self, scene, senv, action):
         # Refer.
-        self.scene = scene
-        self.senv  = senv
+        self.scene  = scene
+        self.senv   = senv
+        self.action = action
         # Create.
-        self.activeTarget = None
-        self.score        = 0
-        self.timeLeft     = MAIN_TIMER_LIGHTS * 2
+        self.activeTarget            = None
+        self.score                   = 0
+        self.timeLeft                = MAIN_TIMER_LIGHTS * 2
+        self.followerInitialPosition = None
     def __del__(self):
         # Derefer.
-        self.scene = None
-        self.senv  = None
+        self.scene  = None
+        self.senv   = None
+        self.action = None
+    def moveLeverage(self, sceneName, nodeName):
+        st = pymjin2.State()
+        key = "leverage.{0}.{1}.moving".format(sceneName, nodeName)
+        st.set(key, "1")
+        self.senv.setState(st)
+    def onFollowerPosition(self, key, values):
+        pass
+        #print "onFollowerPosition", key, values
     def onLeverageHit(self, key, values):
         # Ignore dehitting.
         if (values[0] == "0"):
@@ -78,11 +92,10 @@ class MainImpl(object):
             return
         v = key.split(".")
         sceneName = v[1]
-        nodeName  = MAIN_TARGETS_LEVERAGES[v[2]]
-        st = pymjin2.State()
-        key = "leverage.{0}.{1}.moving".format(sceneName, nodeName)
-        st.set(key, "1")
-        self.senv.setState(st)
+        targetName = v[2]
+        nodeName  = MAIN_TARGETS_LEVERAGES[targetName]
+        self.moveLeverage(sceneName, nodeName)
+        self.syncFollower(sceneName, targetName)
     def popRandomTarget(self, sceneName):
         random.seed(pymjin2.rand(True))
         id = random.randint(0, len(MAIN_TARGETS_LEVERAGES) - 1)
@@ -116,6 +129,10 @@ class MainImpl(object):
 
             st.set(key, mat)
         self.scene.setState(st)
+    def setupFollower(self, sceneName, nodeName):
+        key = "node.{0}.{1}.position".format(sceneName, nodeName)
+        st = self.scene.state([key])
+        self.followerInitialPosition = st.value(key)[0].split(" ")
     def step(self, sceneName):
         # Do not proceed if time is off.
         if (self.timeLeft < 0):
@@ -124,6 +141,28 @@ class MainImpl(object):
         self.popRandomTarget(sceneName)
         # Tick the timer each target pop cycle iteration.
         self.tickTimer(sceneName)
+    def syncFollower(self, sceneName, targetName):
+        key = "node.{0}.{1}.position".format(sceneName, targetName)
+        st = self.scene.state([key])
+        if (not len(st.keys)):
+            print "Could not get target position"
+            return
+        tpos = st.value(key)[0].split(" ")
+        key = "{0}.point".format(MAIN_FOLLOWER_ACTION)
+        st = pymjin2.State()
+        pos1 = "{0} {1} {2} {3}".format(MAIN_FOLLOWER_SYNC_TIME,
+                                        tpos[0],
+                                        tpos[1],
+                                        self.followerInitialPosition[2])
+        pos2 = "{0} {1} {2} {3}".format(MAIN_FOLLOWER_SYNC_TIME,
+                                        self.followerInitialPosition[0],
+                                        self.followerInitialPosition[1],
+                                        self.followerInitialPosition[2])
+        poss = [pos1, pos2]
+        st.set(key, poss)
+        key = "{0}.active".format(MAIN_FOLLOWER_ACTION)
+        st.set(key, "1")
+        self.action.setState(st)
     def tickTimer(self, sceneName):
         self.timeLeft = self.timeLeft - 1
         self.setTimer(sceneName, self.timeLeft / 2 + 1)
@@ -147,7 +186,7 @@ class Main:
         self.leverage = mLeverage.Leverage(scene, action, scriptEnvironment)
         mTarget = self.dependencies[MAIN_DEPENDENCY_TARGET]
         self.target = mTarget.Target(scene, action, scriptEnvironment)
-        self.impl = MainImpl(self.scene, self.senv)
+        self.impl = MainImpl(self.scene, self.senv, self.action)
         self.subs = pymjin2.Subscriber()
         #self.listenerSEnv = MainListenerScriptEnvironment(self.impl)
         # Prepare.
@@ -174,7 +213,13 @@ class Main:
         # Listen to leverage hitting.
         key = "leverage.{0}..hit".format(sceneName)
         self.subs.subscribe(scriptEnvironment, key, self.impl, "onLeverageHit")
+
+
+
+        key = "node.{0}.follower.position".format(sceneName)
+        self.subs.subscribe(scene, key, self.impl, "onFollowerPosition")
         # Start the game.
+        self.impl.setupFollower(sceneName, MAIN_FOLLOWER_NAME)
         self.impl.step(sceneName)
         print "{0} Main.__init__({1}, {2})".format(id(self), sceneName, nodeName)
     def __del__(self):
