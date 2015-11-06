@@ -2,7 +2,7 @@
 import pymjin2
 
 LEVERAGE_ACTION_GROUP      = "default"
-LEVERAGE_ACTION_TYPE_DOWN  = "rotateBy"
+LEVERAGE_ACTION_TYPE_DOWN  = "rotate"
 LEVERAGE_ACTION_TYPE_CATCH = "sequence"
 LEVERAGE_ACTION_NAME_DOWN  = "lowerLeverage"
 LEVERAGE_ACTION_NAME_CATCH = "catchTarget"

@@ -322,3 +322,8 @@ node
             scale = 0.050000 0.050000 0.050000
             material = score_on
             model = models/box.osgt
+        ticker
+            parent = ROOT
+            position = 0.000000 -1.300000 -0.820000
+            material = leverage
+            model = models/leverage.osgt

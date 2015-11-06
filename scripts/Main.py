@@ -13,14 +13,15 @@ MAIN_TARGETS_LEVERAGES  = { "target1" : "leverage1",
                             "target3" : "leverage3",
                             "target4" : "leverage4",
                             "target5" : "leverage5" }
-MAIN_TIMER_LIGHT_PREFIX = "time"
-MAIN_TIMER_LIGHTS       = 20
-MAIN_TIMER_LIGHT_ON     = "time_on"
-MAIN_TIMER_LIGHT_OFF    = "time_off"
-MAIN_SCORE_LIGHT_PREFIX = "score"
-MAIN_SCORE_LIGHTS       = 20
-MAIN_SCORE_LIGHT_ON     = "score_on"
-MAIN_SCORE_LIGHT_OFF    = "score_off"
+MAIN_TIMER_LIGHT_PREFIX  = "time"
+MAIN_TIMER_LIGHTS        = 20
+MAIN_TIMER_LIGHT_ON      = "time_on"
+MAIN_TIMER_LIGHT_OFF     = "time_off"
+MAIN_TIMER_TICKER_ACTION = "rotate.default.tickLeverage"
+MAIN_SCORE_LIGHT_PREFIX  = "score"
+MAIN_SCORE_LIGHTS        = 20
+MAIN_SCORE_LIGHT_ON      = "score_on"
+MAIN_SCORE_LIGHT_OFF     = "score_off"
 
 class MainImpl(object):
     def __init__(self, scene, senv, action):
@@ -166,6 +167,12 @@ class MainImpl(object):
     def tickTimer(self, sceneName):
         self.timeLeft = self.timeLeft - 1
         self.setTimer(sceneName, self.timeLeft / 2 + 1)
+        self.tickTimerTicker()
+    def tickTimerTicker(self):
+        st = pymjin2.State()
+        key = "{0}.active".format(MAIN_TIMER_TICKER_ACTION)
+        st.set(key, "1")
+        self.action.setState(st)
 
 class Main:
     def __init__(self,
