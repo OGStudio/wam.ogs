@@ -4,138 +4,67 @@ import pymjin2
 TARGET_ACTION_POP  = "sequence.default.popTarget"
 TARGET_ACTION_WAIT = "delay.default.waitForLeverage"
 
-class TargetImpl(object):
-    def __init__(self, env):
-        # Refer.
-        self.env = env
-        # Create.
-        self.selectable = {}
-        self.actions    = {}
-    def __del__(self):
-        # Derefer.
-        self.env = None
-    def onActionState(self, key, values):
-        state = (values[0] == "1")
-        # Ignore other actions.
-        actionName = key.replace(".active", "")
-        if (actionName not in self.actions):
-            return
-        node = self.actions[actionName]
-        s = self.selectable[node]
-        if (actionName == s.pop):
-            # Ignore activation.
-            if (state):
-                return
-            s.moving = False
-            self.report(node, "moving", "0")
-        elif (actionName == s.wait):
-            self.report(node, "catch", values[0])
-    def onSelection(self, key, values):
-        nodeName = values[0]
-        # Ignore deselection.
-        if (not len(nodeName)):
-            return
-        v = key.split(".")
-        sceneName = v[1]
-        node = sceneName + "." + nodeName
-        if (node not in self.selectable):
-            return
-        s = self.selectable[node]
-        # Ignore non-moving.
-        if (not s.moving):
-            return
-        self.report(node, "selected", "1")
-        self.report(node, "selected", "0")
-    def report(self, node, property, value):
-        st = pymjin2.State()
-        key = "target.{0}.{1}".format(node, property)
-        st.set(key, value)
-        self.senv.reportStateChange(st)
-    def setMoving(self, key, values):
-        v = key.split(".")
-        sceneName = v[1]
-        nodeName  = v[2]
-        node = sceneName + "." + nodeName
-        if (node not in self.selectable):
-            return
-        s = self.selectable[node]
-        s.moving = True
-        st = pymjin2.State()
-        st.set("{0}.node".format(s.pop), node)
-
-        sequence.default.popTarget.default.target1.active = 1
-
-        sequence.default.popTarget = { "default.target1" : { "active" : "1" }
-                
-                
-                "active" : "1",
-                                         "node" : "default.target1",
-        .active = 1
-
-        st.set("{0}.active".format(s.pop), "1")
-        self.action.setState(st)
-    def setSelectable(self, key, values):
-        v = key.split(".")
-        sceneName = v[1]
-        nodeName  = v[2]
-        state     = (values[0] == "1")
-        node = sceneName + "." + nodeName
-        if (state):
-            # Clone sequence action and its children.
-            key = "{0}.{1}.{2}.clone".format(TARGET_ACTION_TYPE_POP,
-                                             TARGET_ACTION_GROUP,
-                                             TARGET_ACTION_NAME_POP)
-            st = self.action.state([key])
-            newGroupName = st.value(key)[0]
-            s = TargetState()
-            s.setActionGroup(newGroupName)
-            self.selectable[node] = s
-            self.actions[s.wait] = node
-            self.actions[s.pop]  = node
-        # Remove disabled.
-        elif (node in self.selectable):
-            s = self.selectable[node]
-            del self.actions[s.wait]
-            del self.actions[s.pop]
-            del self.selectable[node]
-
 class Target:
-    def __init__(self, node, env, deps):
+    def __init__(self, sceneName, nodeName, env):
         # Refer.
         self.env = env
         # Create.
-        self.impl = TargetImpl(env)
-        self.proxy = EnvironmentProxy("Target", "Turn any node into WAM target")
-        #                   Key.                             Class.     Method.
-        self.proxy.listen("selector..selectedNode",        self.impl, "onSelection")
-        self.proxy.listen(TARGET_ACTION_POP, 
-        self.proxy.listen("..active".format(TARGET_ACTION_POP),    self.impl, "onActionTarget")
-        self.proxy.listen("delay..waitForLeverage.active", self.impl, "onActionWait")
-#        self.proxy.listen(self.impl,
-#                          { "selector..selectedNode" : "onSelection",
-#                        "sequence..popTarget.active" : "onTargetPop",
-#                     "delay..waitForLeverage.active" : "onLeverageWait" })
-        #                  Key.                   Class.     Set method.      Get method.
-        self.proxy.provide("target...catch",      None,      None,            None)
-        self.proxy.provide("target...moving",     self.impl, "setMoving",     None)
-        self.proxy.provide("target...selectable", self.impl, "setSelectable", None)
-        self.proxy.provide("target...selected",   self.impl, None,            None)
+        self.u = EnvironmentUser("Target", "Turn specific node into WAM target")
+        self.isMoving = False
+        # Listen to node selection.
+        key = ["selector", sceneName, "selectedNode"]
+        self.u.listen(key, nodeName, self, "onSelection")
+        # Listen to pop action finish.
+        key = [TARGET_ACTION_POP, sceneName, nodeName, "active"]
+        self.u.listen(key, "0", self, "onPopFinished")
+        # Listen to wait action.
+        key = [TARGET_ACTION_WAIT, sceneName, nodeName, "active"]
+        self.u.listen(key, None, self, "onWait")
+        # Provide "catch" ability.
+        key = ["target", sceneName, nodeName, "catch"]
+        # Since no class and methods are specified, this property is only reported.
+        self.u.provide(key)
+        # Provide "moving" ability. Only setter.
+        key = ["target", sceneName, nodeName, "moving"]
+        self.u.provide(key, self, "setMoving")
+        # Provide "selected" ability. Only reporting.
+        key = ["target", sceneName, nodeName, "selected"]
+        self.u.provide(key)
         # Prepare.
-        self.env.registerProxy(self.proxy)
+        self.env.registerUser(self.u)
     def __del__(self):
         # Tear down.
-        self.env.deregisterProxy(self.proxy)
+        self.env.deregisterUser(self.u)
         # Destroy.
-        del self.proxy
-        del self.impl
+        del self.u
         # Derefer.
         self.env = None
+    def onPopFinished(self, key, value):
+        self.isMoving = False
+        key = ["target", sceneName, nodeName, "moving"]
+        self.u.set(key, "0")
+    def onSelection(self, key, value):
+        # Ignore non-moving.
+        if (not self.isMoving):
+            return
+        sceneName = key[1]
+        nodeName  = value[0]
+        key = ["target", sceneName, nodeName, "selected"]
+        self.u.set(key, "1")
+        self.u.set(key, "0")
+    def onWait(self, key, value):
+        key = ["target", sceneName, nodeName, "catch"]
+        self.u.set(key, value[0])
+    def setMoving(self, key, value):
+        sceneName = key[1]
+        nodeName  = key[2]
+        # Assume setMoving is only called with value = 1.
+        self.isMoving = True
+        key = [TARGET_ACTION_POP, sceneName, nodeName, "active"]
+        self.u.set(key, "1")
 
-def SCRIPT_CREATE(node, env, deps):
-    return Target(node, env, deps)
-
-def SCRIPT_DEPENDENCIES():
-    return []
+def SCRIPT_CREATE(sceneName, nodeName, env):
+    return Target(sceneName, nodeName, env)
 
 def SCRIPT_DESTROY(instance):
     del instance
