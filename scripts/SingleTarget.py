@@ -1,45 +1,18 @@
 
 import pymjin2
 
-TARGET_ACTION_POP  = "sequence.default.popTarget"
-TARGET_ACTION_WAIT = "delay.default.waitForLeverage"
+SINGLE_TARGET_ACTION_POP  = "sequence.default.popTarget"
+SINGLE_TARGET_ACTION_WAIT = "delay.default.waitForLeverage"
 
-class Target:
-    def __init__(self, sceneName, nodeName, env):
+class SingleTargetImpl(object):
+    def __init__(self, user):
         # Refer.
-        self.env       = env
-        self.sceneName = sceneName
-        self.nodeName  = nodeName
+        self.u = user
         # Create.
-        self.u = EnvironmentUser("Target", "Turn specific node into WAM target")
         self.isMoving = False
-        # Listen to node selection.
-        self.u.listen(["selector", sceneName, "selectedNode"]
-                      nodeName,
-                      self.onSelection)
-        # Listen to pop action finish.
-        self.u.listen([TARGET_ACTION_POP, sceneName, nodeName, "active"],
-                      "0",
-                      self.onPopFinished)
-        # Listen to wait action.
-        self.u.listen([TARGET_ACTION_WAIT, sceneName, nodeName, "active"],
-                      None,
-                      self.onWait)
-        # Report "catch".
-        self.u.provide(self.property("catch"))
-        # Accept "moving".
-        self.u.provide(self.property("moving"), self.setMoving)
-        # Report "selected".
-        self.u.provide(self.property("selected"))
-        # Prepare.
-        self.env.registerUser(self.u)
     def __del__(self):
-        # Tear down.
-        self.env.deregisterUser(self.u)
-        # Destroy.
-        del self.u
         # Derefer.
-        self.env = None
+        self.u = None
     def onPopFinished(self, key, value):
         self.isMoving = False
         self.u.set(self.property("moving"), "0")
@@ -52,12 +25,51 @@ class Target:
     def onWait(self, key, value):
         self.u.set(self.property("catch"), value[0])
     def property(self, name):
-        return ["target", self.sceneName, self.nodeName, name]
+        return "target.$SCENE.$NODE." + name
     def setMoving(self, key, value):
         # Assume setMoving is only called with value = 1.
         self.isMoving = True
-        key = [TARGET_ACTION_POP, self.sceneName, self.nodeName, "active"]
-        self.u.set(key, "1")
+        self.u.set("$POP.$SCENE.$NODE.active", "1")
+
+class SingleTarget(object):
+    def __init__(self, sceneName, nodeName, env):
+        # Refer.
+        self.env       = env
+        self.sceneName = sceneName
+        self.nodeName  = nodeName
+        # Create.
+        self.u = EnvironmentUser("SingleTarget/" + nodeName,
+                                 "Turn specific node into WAM target")
+        self.impl = SingleTargetImpl(self.u)
+        # Constants.
+        self.u.d["SCENE"] = sceneName
+        self.u.d["NODE"]  = nodeName
+        self.u.d["POP"]   = SINGLE_TARGET_ACTION_POP
+        self.u.d["WAIT"]  = SINGLE_TARGET_ACTION_WAIT
+        # Listen to node selection.
+        self.u.listen("selector.$SCENE.selectedNode",
+                      nodeName,
+                      self.impl.onSelection)
+        # Listen to pop action finish.
+        self.u.listen("$POP.$SCENE.$NODE.active", "0", self.impl.onPopFinished)
+        # Listen to wait action.
+        self.u.listen("$WAIT.$SCENE.$NODE.active", None, self.impl.onWait)
+        # Report "catch".
+        self.u.provide(self.impl.property("catch"))
+        # Accept "moving".
+        self.u.provide(self.impl.property("moving"), self.setMoving)
+        # Report "selected".
+        self.u.provide(self.impl.property("selected"))
+        # Prepare.
+        self.env.registerUser(self.u)
+    def __del__(self):
+        # Tear down.
+        self.env.deregisterUser(self.u)
+        # Destroy.
+        del self.impl
+        del self.u
+        # Derefer.
+        self.env = None
 
 def SCRIPT_CREATE(sceneName, nodeName, env):
     return Target(sceneName, nodeName, env)
