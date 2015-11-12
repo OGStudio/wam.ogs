@@ -13,14 +13,14 @@ SINGLE_MAIN_TIMER_LIGHTS       = SINGLE_MAIN_SCORE_LIGHTS
 SINGLE_MAIN_TIMER_LIGHT_OFF    = "time_off"
 SINGLE_MAIN_INITIAL_TIME       = SINGLE_MAIN_TIMER_LIGHTS * 2
 
-class MainImpl(object):
+class SingleMainImpl(object):
     def __init__(self, user):
         # Refer.
         self.u = user
         # Create.
         self.activeTarget = None
         self.score        = 0
-        self.timeLeft     = MAIN_INITIAL_TIME
+        self.timeLeft     = SINGLE_MAIN_INITIAL_TIME
     def __del__(self):
         # Derefer.
         self.u = None
@@ -49,8 +49,8 @@ class MainImpl(object):
         self.u.set("leverage.$SCENE.$LEVERAGE.moving", "1")
     def popRandomTarget(self):
         random.seed(pymjin2.rand(True))
-        id = random.randint(0, len(SINGLE_MAIN_TARGETS_NB) - 1)
-        self.u.d["TARGET"] = SINGLE_MAIN_TARGET_NAME + id
+        id = random.randint(1, SINGLE_MAIN_TARGETS_NB)
+        self.u.d["TARGET"] = SINGLE_MAIN_TARGET_NAME + str(id)
         self.u.set("target.$SCENE.$TARGET.moving", "1")
     def setScore(self, value):
         print "setScore", value
@@ -59,10 +59,10 @@ class MainImpl(object):
     def setTimer(self, value):
         id = value / 2
         # Nothing to do yet.
-        if (id == len(SINGLE_MAIN_TIMER_LIGHTS)):
+        if (id == SINGLE_MAIN_TIMER_LIGHTS):
             return
         id = id + 1
-        self.u.d["TIMER"] = SINGLE_MAIN_TIMER_LIGHT_PREFIX + id
+        self.u.d["TIMER"] = SINGLE_MAIN_TIMER_LIGHT_PREFIX + str(id)
         self.u.set("node.$SCENE.$TIMER.material", SINGLE_MAIN_TIMER_LIGHT_OFF)
     def step(self):
         # Do not proceed the game if time is off.
@@ -84,7 +84,8 @@ class SingleMain:
         # Refer.
         self.env = env
         # Create.
-        self.u = EnvironmentUser("SingleMain", "Whac-a-mole main script")
+        self.u = pymjin2.EnvironmentUser("SingleMain",
+                                         "Whac-a-mole main script")
         self.impl = SingleMainImpl(self.u)
         # Prepare.
         # Constants.
