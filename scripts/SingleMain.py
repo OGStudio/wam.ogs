@@ -57,7 +57,8 @@ class SingleMainImpl(object):
         self.u.d["SCORE"] = SINGLE_MAIN_SCORE_LIGHT_PREFIX + value
         self.u.set("node.$SCENE.$SCORE.material", SINGLE_MAIN_SCORE_LIGHT_ON)
     def setTimer(self, value):
-        id = value / 2
+        print "setTimer", value
+        id = value
         # Nothing to do yet.
         if (id == SINGLE_MAIN_TIMER_LIGHTS):
             return
