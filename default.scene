@@ -264,26 +264,31 @@ node
             position = -0.750000 -0.750000 -0.500000
             material = target
             model = models/target.osgt
+            script = scripts/SingleTarget.py
         target2
             parent = target
             position = -0.370000 -0.370000 -0.500000
             material = target
             model = models/target.osgt
+            script = scripts/SingleTarget.py
         target3
             parent = target
             position = 0.000000 -0.750000 -0.500001
             material = target
             model = models/target.osgt
+            script = scripts/SingleTarget.py
         target4
             parent = target
             position = 0.380000 -0.370000 -0.500000
             material = target
             model = models/target.osgt
+            script = scripts/SingleTarget.py
         target5
             parent = target
             position = 0.750000 -0.750000 -0.500001
             material = target
             model = models/target.osgt
+            script = scripts/SingleTarget.py
         leverage
             parent = ROOT
         leverage1
@@ -292,30 +297,35 @@ node
             rotation = 270.000000 0.000000 0.000000
             material = leverage
             model = models/leverage.osgt
+            script = scripts/SingleLeverage.py
         leverage2
             parent = leverage
             position = -0.370000 0.630000 0.350000
             rotation = 270.000000 0.000000 0.000000
             material = leverage
             model = models/leverage.osgt
+            script = scripts/SingleLeverage.py
         leverage3
             parent = leverage
             position = 0.000000 0.250000 0.350000
             rotation = 270.000244 0.000000 0.000000
             material = leverage
             model = models/leverage.osgt
+            script = scripts/SingleLeverage.py
         leverage4
             parent = leverage
             position = 0.370000 0.630000 0.350000
             rotation = 269.999817 0.000000 0.000000
             material = leverage
             model = models/leverage.osgt
+            script = scripts/SingleLeverage.py
         leverage5
             parent = leverage
             position = 0.750000 0.250000 0.350000
             rotation = 270.000000 0.000000 0.000000
             material = leverage
             model = models/leverage.osgt
+            script = scripts/SingleLeverage.py
         follower
             parent = ROOT
             position = 0.000000 -1.000000 0.200000

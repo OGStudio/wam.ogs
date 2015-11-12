@@ -26,8 +26,8 @@ class SingleLeverage:
         # Refer.
         self.env = env
         # Create.
-        self.u = EnvironmentUser("SingleLeverage/" + nodeName,
-                                 "Turn specific node into WAM leverage")
+        self.u = pymjin2.EnvironmentUser("SingleLeverage/" + nodeName,
+                                         "Turn specific node into WAM leverage")
         self.impl = SingleLeverageImpl(self.u)
         # Prepare.
         # Constants.

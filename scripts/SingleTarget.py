@@ -38,8 +38,8 @@ class SingleTarget(object):
         self.sceneName = sceneName
         self.nodeName  = nodeName
         # Create.
-        self.u = EnvironmentUser("SingleTarget/" + nodeName,
-                                 "Turn specific node into WAM target")
+        self.u = pymjin2.EnvironmentUser("SingleTarget/" + nodeName,
+                                         "Turn specific node into WAM target")
         self.impl = SingleTargetImpl(self.u)
         # Constants.
         self.u.d["SCENE"] = sceneName
@@ -57,7 +57,7 @@ class SingleTarget(object):
         # Report "catch".
         self.u.provide(self.impl.property("catch"))
         # Accept "moving".
-        self.u.provide(self.impl.property("moving"), self.setMoving)
+        self.u.provide(self.impl.property("moving"), self.impl.setMoving)
         # Report "selected".
         self.u.provide(self.impl.property("selected"))
         # Prepare.
@@ -72,7 +72,7 @@ class SingleTarget(object):
         self.env = None
 
 def SCRIPT_CREATE(sceneName, nodeName, env):
-    return Target(sceneName, nodeName, env)
+    return SingleTarget(sceneName, nodeName, env)
 
 def SCRIPT_DESTROY(instance):
     del instance
