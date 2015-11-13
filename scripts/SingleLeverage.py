@@ -12,10 +12,10 @@ class SingleLeverageImpl(object):
         # Derefer.
         self.u = None
     def onCatchFinished(self, key, value):
-        self.u.set(self.property("moving"), "0")
+        self.u.report(self.property("moving"), "0")
     def onDownFinished(self, key, value):
-        self.u.set(self.property("hit"), "1")
-        self.u.set(self.property("hit"), "0")
+        self.u.report(self.property("hit"), "1")
+        self.u.report(self.property("hit"), "0")
     def property(self, name):
         return "leverage.$SCENE.$NODE." + name
     def setMoving(self, key, value):

@@ -15,21 +15,18 @@ class SingleTargetImpl(object):
         self.u = None
     def onPopFinished(self, key, value):
         self.isMoving = False
-        self.u.set(self.property("moving"), "0")
+        self.u.report(self.property("moving"), "0")
     def onSelection(self, key, value):
         # Ignore selection if we're not moving.
         if (not self.isMoving):
             return
-        self.u.set(self.property("selected"), "1")
-        self.u.set(self.property("selected"), "0")
+        self.u.report(self.property("selected"), "1")
+        self.u.report(self.property("selected"), "0")
     def onWait(self, key, value):
-        self.u.set(self.property("catch"), value[0])
+        self.u.report(self.property("catch"), value[0])
     def property(self, name):
         return "target.$SCENE.$NODE." + name
     def setMoving(self, key, value):
-        # Ignore stop.
-        if (value[0] == "0"):
-            return
         self.isMoving = True
         self.u.set("$POP.$SCENE.$NODE.active", "1")
 
