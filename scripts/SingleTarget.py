@@ -27,7 +27,9 @@ class SingleTargetImpl(object):
     def property(self, name):
         return "target.$SCENE.$NODE." + name
     def setMoving(self, key, value):
-        # Assume setMoving is only called with value = 1.
+        # Ignore stop.
+        if (value[0] == "0"):
+            return
         self.isMoving = True
         self.u.set("$POP.$SCENE.$NODE.active", "1")
 
