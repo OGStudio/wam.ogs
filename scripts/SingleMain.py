@@ -54,7 +54,7 @@ class SingleMainImpl(object):
         self.u.set("target.$SCENE.$TARGET.moving", "1")
     def setScore(self, value):
         print "setScore", value
-        self.u.d["SCORE"] = SINGLE_MAIN_SCORE_LIGHT_PREFIX + value
+        self.u.d["SCORE"] = SINGLE_MAIN_SCORE_LIGHT_PREFIX + str(value)
         self.u.set("node.$SCENE.$SCORE.material", SINGLE_MAIN_SCORE_LIGHT_ON)
     def setTimer(self, value):
         print "setTimer", value
