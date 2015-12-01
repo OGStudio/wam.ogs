@@ -267,7 +267,7 @@ node
             script = scripts/SingleTarget.py
         target2
             parent = target
-            position = -0.370000 -0.370000 -0.500000
+            position = -0.373000 -0.370000 -0.500000
             material = target
             model = models/target.osgt
             script = scripts/SingleTarget.py
@@ -279,7 +279,7 @@ node
             script = scripts/SingleTarget.py
         target4
             parent = target
-            position = 0.380000 -0.370000 -0.500000
+            position = 0.378000 -0.370000 -0.500000
             material = target
             model = models/target.osgt
             script = scripts/SingleTarget.py

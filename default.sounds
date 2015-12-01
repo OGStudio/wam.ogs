@@ -1,0 +1,6 @@
+soundSource
+    default
+        start
+            buffer = sounds/Start.ogg
+        remove
+            buffer = sounds/TilesRemoved.ogg

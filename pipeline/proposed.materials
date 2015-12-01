@@ -1,0 +1,9 @@
+material
+    default
+        base
+            diffuse = pipeline/textures/wam_tex.png
+            normal = pipeline/textures/base_n.png
+        EDITOR_SELECTION_MATERIAL
+            diffuse = pipeline/textures/selection.png
+            glow = pipeline/textures/selection.png
+            wireframe = 1
