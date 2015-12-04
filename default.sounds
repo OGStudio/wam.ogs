@@ -1,6 +1,14 @@
-soundSource
+soundBuffer
     default
         start
-            buffer = sounds/Start.ogg
+            file = sounds/Start.ogg
         remove
-            buffer = sounds/TilesRemoved.ogg
+            file = sounds/TilesRemoved.ogg
+soundStream
+    default
+        train
+            file = music/train.ogg
+        sky
+            file = music/Skye Cuillin.ogg
+        shortSky
+            file = music/shortSkye.ogg
