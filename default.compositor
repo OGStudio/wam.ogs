@@ -1,5 +1,7 @@
 projectFilename = pipeline/default.materials
-
+template
+    main
+        texture = textureTemplate
 material
     main
         leverage

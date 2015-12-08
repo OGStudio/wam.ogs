@@ -8,7 +8,7 @@
     <texture name="leverage_n" template="textureTemplate">
         <file>pipeline/textures/leverage_n.png</file>
     </texture>
-    <texture name="target_n" template="textureTemplate">
+    <texture name="target_n"><!-- template="textureTemplate">-->
         <file>pipeline/textures/target_n.png</file>
     </texture>
     <texture name="target_tex" template="textureTemplate">

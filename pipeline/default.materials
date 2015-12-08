@@ -1,5 +1,5 @@
 <compositor>
-    <include>pipeline/templates.xml</include>
+    <!--<include>pipeline/templates.xml</include>-->
     <include>pipeline/default.textures</include>
     <material name="base">
         <texture unit="0" varname="diffuseMap">wam_tex</texture>
