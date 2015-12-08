@@ -1,2 +1,10 @@
-
 projectFilename = pipeline/default.materials
+
+material
+    main
+        leverage
+            diffuse = pipeline/textures/leverage_tex.png
+            normal = pipeline/textures/leverage_n.png
+        target
+            diffuse = pipeline/textures/target_tex.png
+            normal = pipeline/textures/target_n.png

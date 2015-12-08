@@ -8,6 +8,7 @@
             <value>1</value>
         </uniform>
     </material>
+<!--
     <material name="leverage">
         <texture unit="0" varname="diffuseMap">leverage_tex</texture>
         <texture unit="1" varname="normalMap">leverage_n</texture>
@@ -22,6 +23,7 @@
             <value>1</value>
         </uniform>
     </material>
+-->
     <material name="score_base">
         <texture unit="0" varname="diffuseMap">wam_tex</texture>
         <texture unit="1" varname="normalMap">score_base_n</texture>
