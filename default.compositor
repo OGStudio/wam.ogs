@@ -1,4 +1,3 @@
-projectFilename = pipeline/default.materials
 template
     main
         texture = textureTemplate
@@ -10,3 +9,18 @@ material
         target
             diffuse = pipeline/textures/target_tex.png
             normal = pipeline/textures/target_n.png
+        base
+            diffuse = pipeline/textures/wam_tex.png
+            normal = pipeline/textures/base_n.png
+        score_base
+            diffuse = pipeline/textures/wam_tex.png
+            normal = pipeline/textures/score_base_n.png
+        score
+            diffuse = pipeline/textures/target_tex.png
+            normal = pipeline/textures/score_n.png
+        time_on
+            diffuse = pipeline/textures/time_tex.png
+            glow = pipeline/textures/time_tex.png
+        score_on
+            diffuse = pipeline/textures/target_tex.png
+            glow = pipeline/textures/target_tex.png
