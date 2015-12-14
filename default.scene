@@ -19,121 +19,101 @@ node
             parent = score
             position = -1.900000 -1.900000 -0.600000
             scale = 0.100000 0.100000 0.100000
-            material = score_off
             model = models/box.osgt
         score2
             parent = score
             position = -1.700000 -1.900000 -0.600000
             scale = 0.100000 0.100000 0.100000
-            material = score_off
             model = models/box.osgt
         score3
             parent = score
             position = -1.500000 -1.900000 -0.600000
             scale = 0.100000 0.100000 0.100000
-            material = score_off
             model = models/box.osgt
         score4
             parent = score
             position = -1.300000 -1.900000 -0.600000
             scale = 0.100000 0.100000 0.100000
-            material = score_off
             model = models/box.osgt
         score5
             parent = score
             position = -1.100000 -1.900000 -0.600000
             scale = 0.100000 0.100000 0.100000
-            material = score_off
             model = models/box.osgt
         score6
             parent = score
             position = -0.900000 -1.900000 -0.600000
             scale = 0.100000 0.100000 0.100000
-            material = score_off
             model = models/box.osgt
         score7
             parent = score
             position = -0.700000 -1.900000 -0.600000
             scale = 0.100000 0.100000 0.100000
-            material = score_off
             model = models/box.osgt
         score8
             parent = score
             position = -0.500000 -1.900000 -0.600000
             scale = 0.100000 0.100000 0.100000
-            material = score_off
             model = models/box.osgt
         score9
             parent = score
             position = -0.300000 -1.900000 -0.600000
             scale = 0.100000 0.100000 0.100000
-            material = score_off
             model = models/box.osgt
         score10
             parent = score
             position = -0.100000 -1.900000 -0.600000
             scale = 0.100000 0.100000 0.100000
-            material = score_off
             model = models/box.osgt
         score11
             parent = score
             position = 0.100000 -1.900000 -0.600000
             scale = 0.100000 0.100000 0.100000
-            material = score_off
             model = models/box.osgt
         score12
             parent = score
             position = 0.300000 -1.900000 -0.600000
             scale = 0.100000 0.100000 0.100000
-            material = score_off
             model = models/box.osgt
         score13
             parent = score
             position = 0.500000 -1.900000 -0.600000
             scale = 0.100000 0.100000 0.100000
-            material = score_off
             model = models/box.osgt
         score14
             parent = score
             position = 0.700000 -1.900000 -0.600000
             scale = 0.100000 0.100000 0.100000
-            material = score_off
             model = models/box.osgt
         score15
             parent = score
             position = 0.900000 -1.900000 -0.600000
             scale = 0.100000 0.100000 0.100000
-            material = score_off
             model = models/box.osgt
         score16
             parent = score
             position = 1.100000 -1.900000 -0.600000
             scale = 0.100000 0.100000 0.100000
-            material = score_off
             model = models/box.osgt
         score17
             parent = score
             position = 1.300000 -1.900000 -0.600000
             scale = 0.100000 0.100000 0.100000
-            material = score_off
             model = models/box.osgt
         score18
             parent = score
             position = 1.500000 -1.900000 -0.600000
             scale = 0.100000 0.100000 0.100000
-            material = score_off
             model = models/box.osgt
         score19
             parent = score
             position = 1.700000 -1.900000 -0.600000
             scale = 0.100000 0.100000 0.100000
-            material = score_off
             model = models/box.osgt
         score20
             parent = score
             position = 1.900000 -1.900000 -0.600000
             scale = 0.100000 0.100000 0.100000
-            material = score_off
             model = models/box.osgt
         time
             parent = ROOT
@@ -264,31 +244,26 @@ node
             position = -0.750000 -0.750000 -0.500000
             material = target
             model = models/target.osgt
-            script = scripts/SingleTarget.py
         target2
             parent = target
             position = -0.373000 -0.370000 -0.500000
             material = target
             model = models/target.osgt
-            script = scripts/SingleTarget.py
         target3
             parent = target
             position = 0.000000 -0.750000 -0.500001
             material = target
             model = models/target.osgt
-            script = scripts/SingleTarget.py
         target4
             parent = target
             position = 0.378000 -0.370000 -0.500000
             material = target
             model = models/target.osgt
-            script = scripts/SingleTarget.py
         target5
             parent = target
             position = 0.750000 -0.750000 -0.500001
             material = target
             model = models/target.osgt
-            script = scripts/SingleTarget.py
         leverage
             parent = ROOT
         leverage1
@@ -297,35 +272,30 @@ node
             rotation = 270.000000 0.000000 0.000000
             material = leverage
             model = models/leverage.osgt
-            script = scripts/SingleLeverage.py
         leverage2
             parent = leverage
             position = -0.370000 0.630000 0.350000
             rotation = 270.000000 0.000000 0.000000
             material = leverage
             model = models/leverage.osgt
-            script = scripts/SingleLeverage.py
         leverage3
             parent = leverage
             position = 0.000000 0.250000 0.350000
             rotation = 270.000244 0.000000 0.000000
             material = leverage
             model = models/leverage.osgt
-            script = scripts/SingleLeverage.py
         leverage4
             parent = leverage
             position = 0.370000 0.630000 0.350000
             rotation = 269.999817 0.000000 0.000000
             material = leverage
             model = models/leverage.osgt
-            script = scripts/SingleLeverage.py
         leverage5
             parent = leverage
             position = 0.750000 0.250000 0.350000
             rotation = 270.000000 0.000000 0.000000
             material = leverage
             model = models/leverage.osgt
-            script = scripts/SingleLeverage.py
         follower
             parent = ROOT
             position = 0.000000 -1.000000 0.200000
@@ -337,3 +307,8 @@ node
             position = 0.000000 -1.300000 -0.820000
             material = leverage
             model = models/leverage.osgt
+        camera
+            parent = ROOT
+            position = 0.000000 -10.000000 1.000000
+            rotation = 90.000000 0.000000 0.000000
+            script = scripts/CameraSync.py
