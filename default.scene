@@ -309,6 +309,6 @@ node
             model = models/leverage.osgt
         camera
             parent = ROOT
-            position = 0.000000 -10.000000 1.000000
-            rotation = 90.000000 0.000000 0.000000
+            position = 5.788192 -3.514382 5.854601
+            rotation = 44.199734 0.000000 64.100021
             script = scripts/CameraSync.py
