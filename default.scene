@@ -9,6 +9,7 @@ node
             parent = ROOT
             material = base
             model = models/base.osgt
+            script = scripts/Main.py
         scoreBase
             parent = ROOT
             material = score_base
@@ -244,26 +245,31 @@ node
             position = -0.750000 -0.750000 -0.500000
             material = target
             model = models/target.osgt
+            selectable = 1
         target2
             parent = target
             position = -0.373000 -0.370000 -0.500000
             material = target
             model = models/target.osgt
+            selectable = 1
         target3
             parent = target
             position = 0.000000 -0.750000 -0.500001
             material = target
             model = models/target.osgt
+            selectable = 1
         target4
             parent = target
             position = 0.378000 -0.370000 -0.500000
             material = target
             model = models/target.osgt
+            selectable = 1
         target5
             parent = target
             position = 0.750000 -0.750000 -0.500001
             material = target
             model = models/target.osgt
+            selectable = 1
         leverage
             parent = ROOT
         leverage1
@@ -309,6 +315,6 @@ node
             model = models/leverage.osgt
         camera
             parent = ROOT
-            position = 5.788192 -3.514382 5.854601
-            rotation = 44.199734 0.000000 64.100021
+            position = -0.385469 -9.442134 4.904364
+            rotation = 62.199787 0.000000 -2.999981
             script = scripts/CameraSync.py
