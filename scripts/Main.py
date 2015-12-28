@@ -15,12 +15,17 @@ class MainImpl(object):
         self.c = None
     def onFinishedLoading(self, key, value):
         print "Starting the game"
-        self.popRandomTarget()
+        self.step()
+    def onFinishedPopping(self, key, value):
+        self.step()
     def popRandomTarget(self):
         random.seed(rand(True))
         id = random.randint(1, SINGLE_MAIN_TARGETS_NB)
+        print "pop target", id
         self.c.setConst("NODE", SINGLE_MAIN_TARGET_NAME + str(id))
         self.c.set("target.$SCENE.$NODE.moving", "1")
+    def step(self):
+        self.popRandomTarget()
 
 class Main(object):
     def __init__(self, sceneName, nodeName, env):
@@ -29,7 +34,10 @@ class Main(object):
         self.impl = MainImpl(self.c)
         # Prepare.
         self.c.setConst("SCENE", sceneName)
+        # Listen to scene loading finish.
         self.c.listen("scene.opened", None, self.impl.onFinishedLoading)
+        # Listen to target popping finish.
+        self.c.listen("target.$SCENE..moving", "0", self.impl.onFinishedPopping)
         print "{0} Main.__init__({1}, {2})".format(id(self), sceneName, nodeName)
     def __del__(self):
         # Tear down.

@@ -13,10 +13,12 @@ class TargetImpl(object):
     def __del__(self):
         # Derefer.
         self.c = None
+    def onFinish(self, key, value):
+        self.isMoving = False
+        self.c.report("target.$SCENE.$NODE.moving", "0")
     def onSelection(self, key, value):
         print "onSelection", key, value
     def setMoving(self, key, value):
-        print "setMoving", key, value
         self.isMoving = True
         self.c.set("$POP.$SCENE.$NODE.active", "1")
 
@@ -27,13 +29,14 @@ class Target(object):
         self.c    = EnvironmentClient(env, name)
         self.impl = TargetImpl(self.c)
         # Prepare.
-        self.c.setConst("SCENE", sceneName)
-        self.c.setConst("NODE",  nodeName)
-        self.c.setConst("POP",   TARGET_ACTION_POP)
-        self.c.setConst("WAIT",  TARGET_ACTION_WAIT)
+        self.c.setConst("SCENE",  sceneName)
+        self.c.setConst("NODE",   nodeName)
+        self.c.setConst("POP",    TARGET_ACTION_POP)
+        self.c.setConst("WAIT",   TARGET_ACTION_WAIT)
         # Listen to target selection.
         self.c.listen("node.$SCENE.$NODE.selected", "1", self.impl.onSelection)
         self.c.provide("target.$SCENE.$NODE.moving", self.impl.setMoving)
+        self.c.listen("$POP.$SCENE.$NODE.active", "0", self.impl.onFinish)
     def __del__(self):
         # Tear down.
         self.c.clear()

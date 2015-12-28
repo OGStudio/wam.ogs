@@ -2,13 +2,10 @@ move
     default
         liftTarget
             point = 0 0 0 0
-            point = 500 0 0 0.1
+            point = 1000 0 0 0.5
         lowerTarget
             point = 0 0 0 0
-            point = 500 0 0 -0.1
-        followTarget
-            relative = 0
-            node = default.follower
+            point = 1000 0 0 -0.5
 rotate
     default
         lowerLeverage
@@ -21,7 +18,10 @@ rotate
             relative = 0
             point = 500 0 0 -20
             point = 500 0 0 20
-            node = default.ticker
+        rotateTarget
+            point = 0 0 0 0
+            point = 2000 0 0 360
+            point = 2000 0 0 0
 delay
     default
         waitForLeverage
@@ -29,9 +29,9 @@ delay
 sequence
     default
         popTarget
-            action = liftTarget
-            action = waitForLeverage
-            action = lowerTarget
+            action = move.liftTarget
+            action = delay.waitForLeverage
+            action = move.lowerTarget
         catchTarget
             action = lowerLeverage
             action = liftLeverage
