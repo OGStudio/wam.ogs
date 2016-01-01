@@ -2,10 +2,10 @@ move
     default
         liftTarget
             point = 0 0 0 0
-            point = 1000 0 0 0.5
+            point = 3000 0 0 0.5
         lowerTarget
             point = 0 0 0 0
-            point = 1000 0 0 -0.5
+            point = 3000 0 0 -0.5
 rotate
     default
         lowerLeverage
@@ -25,7 +25,7 @@ rotate
 delay
     default
         waitForLeverage
-            delay = 1500
+            delay = 2500
 sequence
     default
         popTarget

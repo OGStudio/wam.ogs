@@ -18,6 +18,8 @@ class MainImpl(object):
         self.step()
     def onFinishedPopping(self, key, value):
         self.step()
+    def onSelection(self, key, value):
+        print "Main.onSelection", key, value
     def popRandomTarget(self):
         random.seed(rand(True))
         id = random.randint(1, SINGLE_MAIN_TARGETS_NB)
@@ -38,6 +40,8 @@ class Main(object):
         self.c.listen("scene.opened", None, self.impl.onFinishedLoading)
         # Listen to target popping finish.
         self.c.listen("target.$SCENE..moving", "0", self.impl.onFinishedPopping)
+        # Listen to target selection while it's ready for it.
+        self.c.listen("target.$SCENE..selected", "1", self.impl.onSelection)
         print "{0} Main.__init__({1}, {2})".format(id(self), sceneName, nodeName)
     def __del__(self):
         # Tear down.
